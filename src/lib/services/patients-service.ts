@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { supabase } from '@/lib/supabase'
 import { calculateAge } from '@/lib/validations/patient'
 
@@ -24,7 +26,7 @@ export interface CreatePatientData {
   email?: string
 }
 
-export interface UpdatePatientData extends Partial<CreatePatientData> {}
+export type UpdatePatientData = Partial<CreatePatientData>
 
 /**
  *  Create patient

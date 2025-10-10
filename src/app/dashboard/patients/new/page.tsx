@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 import { AppSection } from '@/components/app-section'
 import { PatientForm } from '@/components/forms/patient-form'

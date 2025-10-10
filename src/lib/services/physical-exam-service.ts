@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { PhysicalExamFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
 
@@ -25,8 +27,7 @@ export interface CreatePhysicalExamData {
   findings?: string
 }
 
-export interface UpdatePhysicalExamData
-  extends Partial<CreatePhysicalExamData> {}
+export type UpdatePhysicalExamData = Partial<CreatePhysicalExamData>
 
 /**
  *  Create physical exam

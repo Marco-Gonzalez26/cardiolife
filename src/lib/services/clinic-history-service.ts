@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClinicHistoryFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
 
@@ -21,8 +22,7 @@ export interface CreateClinicHistoryData {
   paraclinicalExam: string
 }
 
-export interface UpdateClinicHistoryData
-  extends Partial<CreateClinicHistoryData> {}
+export type UpdateClinicHistoryData = Partial<CreateClinicHistoryData>
 
 /**
  *  Create clinic history

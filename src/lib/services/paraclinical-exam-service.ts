@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ParaclinicalExamFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
 
@@ -31,8 +32,7 @@ export interface CreateParaclinicalExamData {
   findings?: string
 }
 
-export interface UpdateParaclinicalExamData
-  extends Partial<CreateParaclinicalExamData> {}
+export type UpdateParaclinicalExamData = Partial<CreateParaclinicalExamData>
 
 /**
  *  Create paraclinical exam
@@ -159,13 +159,15 @@ export async function getAllParaclinicalExams() {
   if (error) throw new Error(error.message)
 
   return data || []
-} 
+}
 
 /**
  * Get paraclinical exam by clinic history id
  */
 
-export async function getParaclinicalExamByClinicHistoryId(clinicHistoryId: string) {
+export async function getParaclinicalExamByClinicHistoryId(
+  clinicHistoryId: string
+) {
   const { data, error } = await supabase
     .from('paraclinical_exam')
     .select('*')

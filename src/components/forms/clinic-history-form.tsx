@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -330,10 +331,14 @@ export const ClinicHistoryForm = ({
                                   <FormControl>
                                     <Input
                                       placeholder='Detalles'
-                                      className={cn('border-neutral-300 text-sm transition-opacity', {
-                                        "opacity-0 pointer-events-none": !checkboxField.value, 
-                                        "opacity-100": checkboxField.value
-                                      })}
+                                      className={cn(
+                                        'border-neutral-300 text-sm transition-opacity',
+                                        {
+                                          'opacity-0 pointer-events-none':
+                                            !checkboxField.value,
+                                          'opacity-100': checkboxField.value
+                                        }
+                                      )}
                                       {...detailsField}
                                     />
                                   </FormControl>

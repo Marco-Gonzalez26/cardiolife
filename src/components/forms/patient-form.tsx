@@ -26,9 +26,12 @@ import {
 import { Calendar } from '../ui/calendar'
 import { cn, getDate } from '@/lib/utils'
 import { useEffect } from 'react'
+import { CreatePatientData } from '@/lib/services/patients-service'
 
 interface PatientFormProps {
-  formSubmit: (data: PatientFormData) => Promise<void>
+  formSubmit: (
+    data: PatientFormData | CreatePatientData
+  ) => void | Promise<void>
   loading?: boolean
   submitLabel?: string
   defaultValues?: PatientFormData

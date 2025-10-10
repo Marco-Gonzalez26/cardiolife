@@ -1,3 +1,4 @@
+
 import { getPatientById } from '@/lib/services/patients-service'
 
 import { EditPatient } from '@/components/edit-patient'

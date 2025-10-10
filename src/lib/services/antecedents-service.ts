@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AntecedentsFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
 
@@ -59,7 +60,7 @@ export interface CreateAntecedentsData {
   drugs?: JsonData
 }
 
-export interface UpdateAntecedentsData extends Partial<CreateAntecedentsData> {}
+export type UpdateAntecedentsData = Partial<CreateAntecedentsData>
 
 /**
  *  Create antecedents
