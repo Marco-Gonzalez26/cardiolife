@@ -11,7 +11,7 @@ export interface Antecedents {
   created_at: string
   currentDisease?: string
   hta?: JsonData
-  cigarrette?: JsonData
+  cigarette?: JsonData
   exercise?: JsonData
   religion?: JsonData
   alcohol?: JsonData
@@ -37,7 +37,7 @@ export interface Antecedents {
 export interface CreateAntecedentsData {
   currentDisease?: string
   hta?: JsonData
-  cigarrette?: JsonData
+  cigarette?: JsonData
   exercise?: JsonData
   religion?: JsonData
   alcohol?: JsonData
@@ -74,7 +74,7 @@ export async function createAntecedents(
     .insert({
       currentDisease: data.currentDisease || null,
       hta: data.hta || null,
-      cigarrette: data.cigarrette || null,
+      cigarette: data.cigarette || null,
       exercise: data.exercise || null,
       religion: data.religion || null,
       alcohol: data.alcohol || null,

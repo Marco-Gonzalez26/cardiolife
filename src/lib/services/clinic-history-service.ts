@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClinicHistoryFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
+import { createAntecedents } from './antecedents-service'
+import { createPhysicalExam } from './physical-exam-service'
+import { createParaclinicalExam } from './paraclinical-exam-service'
 
 export interface ClinicHistory {
   id: string
@@ -17,9 +20,9 @@ export interface CreateClinicHistoryData {
   date: string
   reason: string
   treatmentPlan: string
-  antecedents: string
-  physicalExam: string
-  paraclinicalExam: string
+  antecedents: ClinicHistoryFormData['antecedents']
+  physicalExam: ClinicHistoryFormData['physicalExam']
+  paraclinicalExam: ClinicHistoryFormData['paraclinicalExam']
 }
 
 export type UpdateClinicHistoryData = Partial<CreateClinicHistoryData>
@@ -29,17 +32,33 @@ export type UpdateClinicHistoryData = Partial<CreateClinicHistoryData>
  */
 
 export async function createClinicHistory(
-  data: CreateClinicHistoryData
+  data: CreateClinicHistoryData & { patientId: string }
 ): Promise<ClinicHistory | null> {
+  const antecedents = await createAntecedents(data.antecedents)
+  if (!antecedents) {
+    throw new Error('Error al crear antecedentes')
+  }
+
+  const physicalExam = await createPhysicalExam(data.physicalExam)
+  if (!physicalExam) {
+    throw new Error('Error al crear examen físico')
+  }
+
+  const paraclinicalExam = await createParaclinicalExam(data.paraclinicalExam)
+  if (!paraclinicalExam) {
+    throw new Error('Error al crear examen paraclinico')
+  }
+
   const { data: clinicHistory, error } = await supabase
-    .from('clinic_history')
+    .from('clinicHistory')
     .insert({
+      patient: data.patientId,
       date: data.date,
       reason: data.reason,
       treatmentPlan: data.treatmentPlan,
-      antecedents: JSON.stringify(data.antecedents),
-      physicalExam: JSON.stringify(data.physicalExam),
-      paraclinicalExam: JSON.stringify(data.paraclinicalExam)
+      antecedents: antecedents.id,
+      physicalExam: physicalExam.id,
+      paraclinicalExam: paraclinicalExam.id
     })
     .select()
     .single()
@@ -58,7 +77,7 @@ export async function getClinicHistoryById(
 ): Promise<ClinicHistory | null> {
   try {
     const { data, error } = await supabase
-      .from('clinic_history')
+      .from('clinicHistory')
       .select('*')
       .eq('id', id)
       .single()
@@ -91,7 +110,7 @@ export async function updateClinicHistory(
       updateData.treatmentPlan = updateData.treatmentPlan.trim()
     }
     const { data: clinicHistory, error } = await supabase
-      .from('clinic_history')
+      .from('clinicHistory')
       .update(data)
       .eq('id', id)
       .select()
@@ -113,7 +132,7 @@ export async function updateClinicHistory(
 
 export async function getAllClinicHistories() {
   const { data, error } = await supabase
-    .from('clinic_history')
+    .from('clinicHistory')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -128,7 +147,7 @@ export async function getAllClinicHistories() {
 
 export async function getClinicHistoryByPatientId(patientId: string) {
   const { data, error } = await supabase
-    .from('clinic_history')
+    .from('clinicHistory')
     .select('*')
     .eq('patient_id', patientId)
 

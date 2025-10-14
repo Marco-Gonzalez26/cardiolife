@@ -1,15 +1,22 @@
-import { th } from 'react-day-picker/locale'
 import * as z from 'zod'
 
-const jsonFieldSchema = z.object({
-  status: z.boolean().catch(false),
-  details: z.string().catch('')
-})
+const jsonFieldSchema = z
+  .object({
+    status: z.boolean(),
+    details: z.string()
+  })
+  .catch({ status: false, details: '' })
+  .refine((data) => !data.status || data.details.trim().length > 0, {
+    message: 'Si marca el antecedente, debe ingresar detalles',
+    path: ['details']
+  })
 
 export const antecedentsSchema = z.object({
-  currentDisease: z.string(),
+  currentDisease: z
+    .string()
+    .min(1, 'Ingrese el motivo actual de la enfermedad'),
   hta: jsonFieldSchema,
-  cigarrette: jsonFieldSchema,
+  cigarette: jsonFieldSchema,
   exercise: jsonFieldSchema,
   religion: jsonFieldSchema,
   alcohol: jsonFieldSchema,
@@ -33,34 +40,34 @@ export const antecedentsSchema = z.object({
 })
 
 export const physicalExamSchema = z.object({
-  systolicBp: z.string(),
-  dyastolicBp: z.string(),
-  heartRate: z.string(),
-  respiratoryRate: z.string(),
-  weight: z.string(),
-  height: z.string(),
-  imc: z.string(),
-  findings: z.string()
+  systolicBp: z.string().min(1, 'Ingrese la presion arterial sistólica'),
+  dyastolicBp: z.string().min(1, 'Ingrese la presion arterial diastólica'),
+  heartRate: z.string().min(1, 'Ingrese la frecuencia cardíaca'),
+  respiratoryRate: z.string().min(1, 'Ingrese la frecuencia respiratoria'),
+  weight: z.string().min(1, 'Ingrese el peso'),
+  height: z.string().min(1, 'Ingrese la altura'),
+  imc: z.string().min(1, 'Ingrese el IMC'),
+  findings: z.string().min(1, 'Ingrese los hallazgos del examen físico')
 })
 
 export const paraclinicalExamSchema = z.object({
-  rs: z.string(),
-  pWave: z.string(),
+  rs: z.string().min(1, 'Ingrese el RS'),
+  pWave: z.string().min(1, 'Ingrese el Onda P'),
   bloodPreassure: z.string(),
-  qrs: z.string(),
-  axis: z.string(),
-  qtc: z.string(),
-  ts: z.string(),
-  observations: z.string(),
-  height: z.string(),
-  imc: z.string(),
-  findings: z.string()
+  qrs: z.string().min(1, 'Ingrese el QRS'),
+  axis: z.string().min(1, 'Ingrese el Eje'),
+  qtc: z.string().min(1, 'Ingrese el QTc'),
+  ts: z.string().min(1, 'Ingrese el TS'),
+  observations: z.string().min(1, 'Ingrese las observaciones')
 })
 
 export const clinicHistorySchema = z.object({
   date: z.string(),
   reason: z.string().min(1, 'El motivo de la consulta es requerido'),
-  treatmentPlan: z.string().min(1, 'El plan de tratamiento es requerido'),
+  treatmentPlan: z
+    .string()
+    .min(1, 'El plan de tratamiento es requerido')
+    .catch(''),
   antecedents: antecedentsSchema,
   physicalExam: physicalExamSchema,
   paraclinicalExam: paraclinicalExamSchema

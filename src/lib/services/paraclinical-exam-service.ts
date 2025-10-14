@@ -42,7 +42,7 @@ export async function createParaclinicalExam(
   data: CreateParaclinicalExamData
 ): Promise<ParaclinicalExam | null> {
   const { data: paraclinicalExam, error } = await supabase
-    .from('paraclinical_exam')
+    .from('paraclinicalExam')
     .insert({
       rs: data.rs || null,
       pWave: data.pWave || null,
@@ -51,10 +51,7 @@ export async function createParaclinicalExam(
       axis: data.axis || null,
       qtc: data.qtc || null,
       ts: data.ts || null,
-      observations: data.observations || null,
-      height: data.height || null,
-      imc: data.imc || null,
-      findings: data.findings || null
+      observations: data.observations || null
     })
     .select()
     .single()
@@ -73,7 +70,7 @@ export async function getParaclinicalExamById(
 ): Promise<ParaclinicalExam | null> {
   try {
     const { data, error } = await supabase
-      .from('paraclinical_exam')
+      .from('paraclinicalExam')
       .select('*')
       .eq('id', id)
       .single()
@@ -120,17 +117,9 @@ export async function updateParaclinicalExam(
     if (updateData.observations) {
       updateData.observations = updateData.observations.trim()
     }
-    if (updateData.height) {
-      updateData.height = updateData.height.trim()
-    }
-    if (updateData.imc) {
-      updateData.imc = updateData.imc.trim()
-    }
-    if (updateData.findings) {
-      updateData.findings = updateData.findings.trim()
-    }
+
     const { data: paraclinicalExam, error } = await supabase
-      .from('paraclinical_exam')
+      .from('paraclinicalExam')
       .update(data)
       .eq('id', id)
       .select()
@@ -152,7 +141,7 @@ export async function updateParaclinicalExam(
 
 export async function getAllParaclinicalExams() {
   const { data, error } = await supabase
-    .from('paraclinical_exam')
+    .from('paraclinicalExam')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -169,7 +158,7 @@ export async function getParaclinicalExamByClinicHistoryId(
   clinicHistoryId: string
 ) {
   const { data, error } = await supabase
-    .from('paraclinical_exam')
+    .from('paraclinicalExam')
     .select('*')
     .eq('clinic_history_id', clinicHistoryId)
 

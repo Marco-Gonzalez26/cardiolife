@@ -37,7 +37,7 @@ export async function createPhysicalExam(
   data: CreatePhysicalExamData
 ): Promise<PhysicalExam | null> {
   const { data: physicalExam, error } = await supabase
-    .from('physical_exam')
+    .from('physicalExam')
     .insert({
       systolicBp: data.systolicBp || null,
       dyastolicBp: data.dyastolicBp || null,
@@ -65,7 +65,7 @@ export async function getPhysicalExamById(
 ): Promise<PhysicalExam | null> {
   try {
     const { data, error } = await supabase
-      .from('physical_exam')
+      .from('physicalExam')
       .select('*')
       .eq('id', id)
       .single()
@@ -113,7 +113,7 @@ export async function updatePhysicalExam(
       updateData.findings = updateData.findings.trim()
     }
     const { data: physicalExam, error } = await supabase
-      .from('physical_exam')
+      .from('physicalExam')
       .update(data)
       .eq('id', id)
       .select()
@@ -135,7 +135,7 @@ export async function updatePhysicalExam(
 
 export async function getAllPhysicalExams() {
   const { data, error } = await supabase
-    .from('physical_exam')
+    .from('physicalExam')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -152,7 +152,7 @@ export async function getPhysicalExamByClinicHistoryId(
   clinicHistoryId: string
 ) {
   const { data, error } = await supabase
-    .from('physical_exam')
+    .from('physicalExam')
     .select('*')
     .eq('clinic_history_id', clinicHistoryId)
 
