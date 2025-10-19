@@ -14,17 +14,35 @@ import { createClinicHistory } from '@/lib/services/clinic-history-service'
 import { ClinicHistoryFormData } from '@/lib/validations/clinic-history'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const NewClinicHistory = ({ patientId }: { patientId: string }) => {
-  const handleSubmit = async (values: ClinicHistoryFormData): Promise<any> => {
-    return await createClinicHistory({ ...values, patientId })
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const handleSubmit = async (values: ClinicHistoryFormData): Promise<void> => {
+    setIsLoading(true)
+    try {
+      const clinicHistory = await createClinicHistory({ ...values, patientId })
+      if (clinicHistory) {
+        toast.success('Historia clínica creada exitosamente')
+        router.push(`/dashboard/patients/${patientId}`)
+      } else {
+        toast.error('Error al crear la historia clínica')
+      }
+    } catch (error) {
+      toast.error('Error al crear la historia clínica')
+    } finally {
+      setIsLoading(false)
+    }
   }
   const handleCancel = async () => {}
   return (
     <AppSection>
       <div className='w-full mx-auto'>
         <div className='mb-6 flex items-center justify-between'>
-          <Link href='/patients'>
+          <Link href='/dashboard/patients'>
             <Button variant='ghost' className='hover:bg-neutral-100'>
               <ArrowLeft className='mr-2 h-4 w-4' />
               Volver a Pacientes
@@ -46,6 +64,7 @@ export const NewClinicHistory = ({ patientId }: { patientId: string }) => {
             handleSubmit={handleSubmit}
             handleCancel={handleCancel}
             patientId={patientId}
+            isLoading={isLoading}
           />
         </div>
       </div>
