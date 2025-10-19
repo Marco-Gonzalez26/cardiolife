@@ -62,7 +62,7 @@ export const paraclinicalExamSchema = z.object({
 })
 
 export const clinicHistorySchema = z.object({
-  date: z.string(),
+  date: z.date().min(1, 'Ingrese la fecha de la consulta'),
   reason: z.string().min(1, 'El motivo de la consulta es requerido'),
   treatmentPlan: z
     .string()

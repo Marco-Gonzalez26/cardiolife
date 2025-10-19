@@ -51,11 +51,11 @@ export const ClinicHistoryForm = ({
   const [activeTab, setActiveTab] = useState(TABS.GENERAL)
 
   const form = useForm<ClinicHistoryFormData>({
-    mode: 'onChange',
+    
     resolver: zodResolver(clinicHistorySchema),
 
     defaultValues: {
-      date: defaultValues?.date || new Date().toISOString().split('T')[0],
+      date: defaultValues?.date || new Date(),
       reason: defaultValues?.reason || '',
       treatmentPlan: defaultValues?.treatmentPlan || '',
       antecedents: {
@@ -182,6 +182,7 @@ export const ClinicHistoryForm = ({
     control: form.control
   })
   const isValid = form.formState.isValid
+
   const calculateIMC = () => {
     const weight = parseFloat(watchWeight || '0')
     const height = parseFloat(watchHeight || '0')
@@ -191,7 +192,7 @@ export const ClinicHistoryForm = ({
       form.setValue('physicalExam.imc', imc)
     }
   }
-
+  console.log(form.formState.errors, form.getValues())
   const antecedentFields = [
     { name: 'hta', label: 'Hipertensión Arterial (HTA)' },
     { name: 'diabetes', label: 'Diabetes' },
@@ -222,7 +223,6 @@ export const ClinicHistoryForm = ({
   }, [watchWeight, watchHeight])
 
   const handleFormSubmit = async (values: ClinicHistoryFormData) => {
-    console.log('called')
     handleSubmit(values)
   }
   return (
@@ -261,55 +261,55 @@ export const ClinicHistoryForm = ({
           <TabsContent value={TABS.GENERAL} className='w-full pt-8 md:pt-0'>
             <Card>
               <CardContent className='space-y-4'>
+                <FormField
+                  control={form.control}
+                  name='date'
+                  render={({ field }) => (
+                    <FormItem className='flex flex-col'>
+                      <FormLabel className='text-neutral-700 font-semibold'>
+                        Fecha de la Historia
+                      </FormLabel>
+                      <Popover modal>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}>
+                              {field.value
+                                ? new Date(field.value).toLocaleDateString(
+                                    'es-ES'
+                                  )
+                                : 'Selecciona una fecha'}
+                              <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-auto p-0' align='end'>
+                          <Calendar
+                            hideNavigation
+                            mode='single'
+                            selected={field.value}
+                            startMonth={
+                              new Date(new Date().getFullYear(), 0, 1)
+                            }
+                            endMonth={
+                              new Date(new Date().getFullYear(), 11, 31)
+                            }
+                            ISOWeek
+                            defaultMonth={field.value || new Date()}
+                            onSelect={field.onChange}
+                            captionLayout='dropdown'
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                  <FormField
-                    control={form.control}
-                    name='date'
-                    render={({ field }) => (
-                      <FormItem className='flex flex-col'>
-                        <FormLabel className='text-neutral-700 font-semibold'>
-                          Fecha de la Historia
-                        </FormLabel>
-                        <Popover modal>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={'outline'}
-                                className={cn(
-                                  'pl-3 text-left font-normal',
-                                  !field.value && 'text-muted-foreground'
-                                )}>
-                                {field.value
-                                  ? new Date(field.value).toLocaleDateString(
-                                      'es-ES'
-                                    )
-                                  : 'Selecciona una fecha'}
-                                <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className='w-auto p-0' align='end'>
-                            <Calendar
-                              hideNavigation
-                              mode='single'
-                              selected={
-                                field.value ? new Date(field.value) : undefined
-                              }
-                              startMonth={new Date(1900, 0)}
-                              endMonth={new Date(new Date().getFullYear(), 11)}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date('1900-01-01')
-                              }
-                              captionLayout='dropdown'
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name='reason'
@@ -784,7 +784,7 @@ export const ClinicHistoryForm = ({
           </TabsContent>
         </Tabs>
         <div className='flex justify-end gap-4 pt-4 border-t border-neutral-200'>
-          <Button type='submit' disabled={isLoading}>
+          <Button type='submit' disabled={isLoading || !isValid}>
             {isLoading ? (
               <>
                 <Loader2 className='mr-2 h-4 w-4 animate-spin' />

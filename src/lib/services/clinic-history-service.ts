@@ -17,7 +17,7 @@ export interface ClinicHistory {
 }
 
 export interface CreateClinicHistoryData {
-  date: string
+  date: Date
   reason: string
   treatmentPlan: string
   antecedents: ClinicHistoryFormData['antecedents']
