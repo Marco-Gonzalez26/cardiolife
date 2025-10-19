@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
+import { getClinicHistoryByPatientId } from '@/lib/services/clinic-history-service'
 
 export type ColumnsPatient = {
   id: string
@@ -94,6 +95,7 @@ export const columns: ColumnDef<ColumnsPatient>[] = [
     cell: ({ row }) => {
       const identication = row.getValue('identification') as string
       const id = row.getValue('id') as string
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild title='Abrir menú'>
@@ -115,6 +117,16 @@ export const columns: ColumnDef<ColumnsPatient>[] = [
             <DropdownMenuItem asChild>
               <Link href={`/dashboard/patients/${id}/edit`}>
                 Editar paciente
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/dashboard/patients/${id}/clinic-history`}>
+                Historia clínica
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/dashboard/patients/${id}/clinic-evolution/new`}>
+                Crear evolución
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

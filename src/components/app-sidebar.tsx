@@ -23,8 +23,8 @@ const sidebarItems = [
     icon: Users
   },
   {
-    name: 'Consultas',
-    href: '/dashboard/appointments',
+    name: 'Recetas',
+    href: '/dashboard/prescriptions',
     icon: FileHeart
   },
 
@@ -37,8 +37,8 @@ const sidebarItems = [
 
 export const AppSidebar = () => {
   return (
-    <Sidebar collapsible='icon' variant='sidebar'>
-      <SidebarHeader className='p-1'>
+    <Sidebar collapsible='icon' variant='sidebar' >
+      <SidebarHeader className='p-2'>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild title='Abrir menú'>

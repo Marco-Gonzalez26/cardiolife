@@ -20,7 +20,8 @@ import {
   FileText,
   Plus,
   ClipboardList,
-  Pill
+  Pill,
+  ArrowRight
 } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -83,7 +84,7 @@ export default async function PatientViewPage({
     <AppSection>
       <div className='w-full mx-auto'>
         <div className='mb-6 flex items-center justify-between'>
-          <Link href='/patients'>
+          <Link href='/dashboard/patients'>
             <Button variant='ghost' className='hover:bg-neutral-100'>
               <ArrowLeft className='mr-2 h-4 w-4' />
               Volver a Pacientes
@@ -207,13 +208,7 @@ export default async function PatientViewPage({
                   <CardTitle className='text-lg text-neutral-900'>
                     Historia Clínica
                   </CardTitle>
-                  <CardDescription className='text-neutral-600'>
-                    {clinicHistories && clinicHistories.length > 0
-                      ? `${clinicHistories.length} registro${
-                          clinicHistories.length > 1 ? 's' : ''
-                        }`
-                      : 'Sin registros'}
-                  </CardDescription>
+
                 </div>
 
                 <Link href={`/patients/${params.id}/clinic-history`}>
@@ -244,7 +239,7 @@ export default async function PatientViewPage({
                       <div className='p-4 bg-neutral-50 rounded-lg border border-neutral-200'>
                         <div className='flex items-start justify-between mb-2'>
                           <h4 className='font-semibold text-neutral-900'>
-                            Último Registro
+                            Registro de Historia 
                           </h4>
                           <Badge variant='secondary' className='bg-neutral-200'>
                             {formatDate(latestHistory.date)}
@@ -273,20 +268,20 @@ export default async function PatientViewPage({
                         <Link
                           href={`/patients/${params.id}/clinic-history/${latestHistory.id}`}>
                           <Button
-                            variant='link'
-                            className='mt-2 p-0 h-auto text-neutral-900'>
-                            Ver detalles completos →
+                            variant='ghost'
+                            className='mt-2  h-auto text-neutral-900 hover:cursor-pointer'>
+                            Ver detalles completos <ArrowRight className='ml-1 h-4 w-4' />
                           </Button>
                         </Link>
                       </div>
                     )}
 
-                    <Link href={`/patients/${params.id}/clinic-history/new`}>
+                    <Link href={`/patients/${params.id}/clinic-evolution/new`}>
                       <Button
                         variant='outline'
                         className='w-full border-neutral-300 border-dashed'>
                         <Plus className='mr-2 h-4 w-4' />
-                        Agregar Nueva Historia
+                        Agregar Evolución del Paciente
                       </Button>
                     </Link>
                   </div>
