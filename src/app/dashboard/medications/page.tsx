@@ -1,6 +1,6 @@
 import { AppSection } from '@/components/app-section'
 import { PatientsDataTable } from './data-table'
-import { columns, ColumnsPatient } from './columns'
+import { columns, ColumnsMedication } from './columns'
 import { Button } from '@/components/ui/button'
 import { UserRoundPlus } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,7 +8,7 @@ import { Heading } from '@/components/heading'
 import Link from 'next/link'
 import { getAllPatients } from '@/lib/services/patients-service'
 export default async function Page() {
-  const patients = (await getAllPatients()) as ColumnsPatient[]
+  const patients = (await getAllPatients()) as ColumnsMedication[]
 
   return (
     <AppSection>
