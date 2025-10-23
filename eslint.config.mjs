@@ -23,14 +23,7 @@ const eslintConfig = [
     rules: {
       '@typescript-eslint/no-explicit-any': 'off'
     }
-  },
-  globalIgnores([
-    'src/types/database.types.ts',
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts'
-  ])
+  }
 ]
 
 export default eslintConfig
