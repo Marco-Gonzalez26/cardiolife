@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     left: '25%',
     transform: 'translate(-50%, -50%)',
     opacity: 0.08,
-    width: 280,
+    width: 250,
     height: 280,
     zIndex: 0
   },
@@ -164,9 +164,11 @@ const PrescriptionCard = ({
           <View style={styles.doctorNameContainer}>
             <Text style={styles.doctorName}>{doctorName}</Text>
           </View>
-          <Text style={styles.contactInfo}>Email: {email}</Text>
-          <Text style={styles.contactInfo}>Telf: {phone}</Text>
-          <Text style={styles.hospital}>HOSPITAL GENERAL CLINICA BERMUDEZ</Text>
+          <View style={{ display: 'flex', gap: '4px' }}>
+            <Text style={styles.contactInfo}>Email: {email}</Text>
+            <Text style={styles.contactInfo}>Telf: {phone}</Text>
+          </View>
+
           <Text style={styles.contactInfo}>
             DIR: Prolongación Galápagos y Ambato
           </Text>
