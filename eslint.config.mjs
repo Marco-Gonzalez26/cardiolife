@@ -23,7 +23,7 @@ const eslintConfig = [
       'out/**',
       'build/**',
       'next-env.d.ts',
-      './src/types/database.types.ts'
+      'src/types/database.types.ts'
     ]
   }
 ]
