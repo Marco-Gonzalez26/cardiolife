@@ -129,6 +129,18 @@ const styles = StyleSheet.create({
   }
 })
 
+interface PrescriptionCardProps {
+  type: 'receta' | 'indicaciones'
+  doctorName: string
+  email: string
+  phone: string
+  medications: string[]
+  patientName: string
+  date: string
+  ci: string
+  appointment?: string
+}
+
 // Componente de Receta Individual
 const PrescriptionCard = ({
   type,
@@ -140,7 +152,7 @@ const PrescriptionCard = ({
   date,
   ci,
   appointment
-}) => (
+}: PrescriptionCardProps) => (
   <View
     style={styles.prescription}
     key={patientName}
