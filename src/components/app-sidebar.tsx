@@ -1,8 +1,15 @@
-import { Settings, ChartNoAxesCombined, FileHeart, Users } from 'lucide-react'
+import {
+  Settings,
+  ChartNoAxesCombined,
+  FileHeart,
+  Users,
+  PillBottle
+} from 'lucide-react'
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -27,6 +34,11 @@ const sidebarItems = [
     href: '/dashboard/prescriptions',
     icon: FileHeart
   },
+  {
+    name: 'Medicamentos',
+    href: '/dashboard/medications',
+    icon: PillBottle
+  },
 
   {
     name: 'Ajustes',
@@ -37,7 +49,7 @@ const sidebarItems = [
 
 export const AppSidebar = () => {
   return (
-    <Sidebar collapsible='icon' variant='sidebar' >
+    <Sidebar collapsible='icon' variant='sidebar'>
       <SidebarHeader className='p-2'>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -66,6 +78,15 @@ export const AppSidebar = () => {
           ))}
         </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter className='p-2'>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild title='Cerrar menú'>
+              
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }
