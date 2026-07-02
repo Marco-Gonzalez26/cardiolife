@@ -7,7 +7,7 @@ export const patientSchema = z.object({
     .string()
     .min(10, 'La identificación debe tener 10 caracteres'),
   age: z.string().min(2, 'La edad es requerida'),
-  phoneNumber: z.string().min(10, 'El número debe tener 10 caracteres'),
+  phone_number: z.string().min(10, 'El número debe tener 10 caracteres'),
   job: z.string().min(2, 'El ocupación es requerida'),
   birthdate: z
     .date()

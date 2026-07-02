@@ -24,6 +24,7 @@ export const antecedentsSchema = z.object({
   diabetes: jsonFieldSchema,
   cancer: jsonFieldSchema,
   surgeries: jsonFieldSchema,
+  syncope: jsonFieldSchema,
   heartDisease: jsonFieldSchema,
   dyslipidemia: jsonFieldSchema,
   thyroidDisease: jsonFieldSchema,
@@ -64,6 +65,7 @@ export const paraclinicalExamSchema = z.object({
 export const clinicHistorySchema = z.object({
   date: z.date().min(1, 'Ingrese la fecha de la consulta'),
   reason: z.string().min(1, 'El motivo de la consulta es requerido'),
+  diagnosis: z.string().min(1, 'El diagnóstico es requerido'),
   treatmentPlan: z
     .string()
     .min(1, 'El plan de tratamiento es requerido')

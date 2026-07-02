@@ -8,7 +8,51 @@ import {
   Image
 } from '@react-pdf/renderer'
 
-// Estilos para el documento
+interface MedicationSnapshot {
+  name: string
+  genericname?: string
+  dose: string
+  unit: string
+  form: string
+  route?: string
+  standardFrequency?: string
+  standardInstructions?: string
+  warnings?: string
+}
+
+interface ConsultationMedication {
+  id: string
+  medication_snapshot: MedicationSnapshot
+  custom_frequency?: string
+  custom_duration?: string
+  custom_instructions?: string
+  quantity_amount: number
+  quantity_unit: string
+}
+
+interface PrescriptionData {
+  doctor: {
+    name: string
+    email: string
+    phone: string
+    signature: {
+      name: string
+      specialty: string
+      ci: string
+      registration: string
+    }
+  }
+  patient: {
+    name: string
+    ci: string
+    date: string
+    nextAppointment?: string
+  }
+  medications: ConsultationMedication[]
+  indications?: ConsultationMedication[]
+}
+
+// Estilos
 const styles = StyleSheet.create({
   page: {
     padding: 20,
@@ -28,10 +72,10 @@ const styles = StyleSheet.create({
   watermark: {
     position: 'absolute',
     top: '50%',
-    left: '25%',
+    left: '50%',
     transform: 'translate(-50%, -50%)',
     opacity: 0.08,
-    width: 250,
+    width: 280,
     height: 280,
     zIndex: 0
   },
@@ -41,21 +85,20 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    marginBottom: 20,
-    paddingBottom: 10,
+    marginBottom: 5,
+    paddingBottom: 5,
     borderBottom: '1px solid #000',
     alignItems: 'flex-start'
   },
   heartImage: {
     width: 60,
-    height: 90,
-    marginRight: 15
+    height: 80,
+    marginRight: 10
   },
   headerText: {
     flex: 1
   },
   doctorNameContainer: {
-    backgroundColor: '#1e3a8a',
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginBottom: 5,
@@ -64,13 +107,13 @@ const styles = StyleSheet.create({
   doctorName: {
     fontSize: 16,
     fontFamily: 'Times-Italic',
-    color: '#FFFFFF',
+    color: '#1e3a8a',
     fontWeight: 'bold'
   },
   contactInfo: {
     fontSize: 9,
     marginBottom: 2,
-    color: '#333'
+    color: '#222'
   },
   hospital: {
     fontSize: 10,
@@ -83,31 +126,46 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#333'
   },
+  indicationText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    marginTop: 3,
+    marginBottom: 2,
+    color: '#000'
+  },
   sectionTitle: {
     fontSize: 11,
     fontWeight: 'bold',
-    marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 5,
     color: '#000'
   },
   medicationItem: {
-    fontSize: 10,
     marginBottom: 8,
-    paddingLeft: 20,
-    color: '#000'
+    paddingLeft: 5
+  },
+  medicationName: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 2
+  },
+  medicationDetails: {
+    fontSize: 9,
+    color: '#333',
+    marginLeft: 10,
+    marginBottom: 1
   },
   contentArea: {
-    minHeight: 200,
-    marginBottom: 20
+    minHeight: 285,
+    marginBottom: 12
   },
   footer: {
     marginTop: 'auto',
-    paddingTop: 15,
-    borderTop: '1px solid #000'
+    paddingTop: 5
   },
   footerDoctor: {
     textAlign: 'center',
-    marginBottom: 8
+    marginBottom: 4
   },
   doctorTitle: {
     fontSize: 10,
@@ -118,10 +176,14 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#333'
   },
+  patientInfoContainer: {
+    borderTop: '1px solid #000',
+    marginTop: 6
+  },
   patientInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 5
   },
   patientDetail: {
     fontSize: 9,
@@ -134,11 +196,17 @@ interface PrescriptionCardProps {
   doctorName: string
   email: string
   phone: string
-  medications: string[]
+  medications: ConsultationMedication[]
   patientName: string
   date: string
   ci: string
   appointment?: string
+  doctorSignature: {
+    name: string
+    specialty: string
+    ci: string
+    registration: string
+  }
 }
 
 // Componente de Receta Individual
@@ -151,12 +219,10 @@ const PrescriptionCard = ({
   patientName,
   date,
   ci,
-  appointment
+  appointment,
+  doctorSignature
 }: PrescriptionCardProps) => (
-  <View
-    style={styles.prescription}
-    key={patientName}
-    id={'Receta ' + patientName}>
+  <View style={styles.prescription}>
     {/* Marca de agua del corazón */}
     <Image
       style={styles.watermark}
@@ -176,11 +242,10 @@ const PrescriptionCard = ({
           <View style={styles.doctorNameContainer}>
             <Text style={styles.doctorName}>{doctorName}</Text>
           </View>
-          <View style={{ display: 'flex', gap: '4px' }}>
+          <View>
             <Text style={styles.contactInfo}>Email: {email}</Text>
             <Text style={styles.contactInfo}>Telf: {phone}</Text>
           </View>
-
           <Text style={styles.contactInfo}>
             DIR: Prolongación Galápagos y Ambato
           </Text>
@@ -194,76 +259,89 @@ const PrescriptionCard = ({
           {type === 'receta' ? 'RECETA:' : 'INDICACIONES:'}
         </Text>
         {medications.map((med, index) => (
-          <Text key={index} style={styles.medicationItem}>
-            {med}
-          </Text>
+          <View key={med.id || index} style={styles.medicationItem}>
+            {type === 'receta' ? (
+              // Para RECETA: solo el nombre del medicamento
+              <Text style={styles.medicationName}>
+                {med.medication_snapshot.name} de {med.medication_snapshot.dose}{' '}
+                {med.medication_snapshot.unit}
+              </Text>
+            ) : (
+              // Para INDICACIONES: nombre + instrucciones
+              <Text style={styles.indicationText}>
+                {index + 1}. {med.medication_snapshot.name}:{' '}
+                {med.custom_instructions ||
+                  med.medication_snapshot.standardInstructions ||
+                  ''}
+              </Text>
+            )}
+          </View>
         ))}
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
         <View style={styles.footerDoctor}>
-          <Text style={styles.doctorTitle}>Dr. Ricardo J González Soto</Text>
-          <Text style={styles.doctorDetails}>Cardiólogo</Text>
-          <Text style={styles.doctorDetails}>CI: 1710234567 Reg: 08952948</Text>
+          <Text style={styles.doctorTitle}>{doctorSignature.name}</Text>
+          <Text style={styles.doctorDetails}>{doctorSignature.specialty}</Text>
+          <Text style={styles.doctorDetails}>
+            CI: {doctorSignature.ci} Reg: {doctorSignature.registration}
+          </Text>
         </View>
-
-        <View style={styles.patientInfo}>
-          <Text style={styles.patientDetail}>Nombre: {patientName}</Text>
-          {appointment && (
-            <Text style={styles.patientDetail}>
-              Próxima Cita: {appointment}
-            </Text>
-          )}
-        </View>
-        <View style={styles.patientInfo}>
-          <Text style={styles.patientDetail}>Fecha: {date}</Text>
-          <Text style={styles.patientDetail}>C.I: {ci}</Text>
+        <View style={styles.patientInfoContainer}>
+          <View style={styles.patientInfo}>
+            <Text style={styles.patientDetail}>Nombre: {patientName}</Text>
+            {appointment && (
+              <Text style={styles.patientDetail}>
+                Próxima Cita: {appointment}
+              </Text>
+            )}
+          </View>
+          <View style={styles.patientInfo}>
+            <Text style={styles.patientDetail}>Fecha: {date}</Text>
+            <Text style={styles.patientDetail}>C.I: {ci}</Text>
+          </View>
         </View>
       </View>
     </View>
   </View>
 )
 
-// Documento completo
-export const MyTestDocument = ({ patientName }: { patientName: string }) => (
-  <Document title={'Receta ' + patientName + ' - Cardiolife'}>
+// Documento completo - Ahora recibe datos dinámicos
+export const MyTestDocument = ({
+  prescriptionData
+}: {
+  prescriptionData: PrescriptionData
+}) => (
+  <Document title={'Receta ' + prescriptionData.patient.name + ' - Cardiolife'}>
     <Page size='A4' style={styles.page} orientation='landscape'>
       <View style={styles.container}>
         {/* Receta 1 - Medicamentos */}
         <PrescriptionCard
           type='receta'
-          doctorName='Dr. Ricardo J González Soto'
-          email='funiscor2008@gmail.com'
-          phone='0999-123-456'
-          medications={[
-            'LOSARTAN: TAB 8  MGR',
-            'NATRILIX  AP: TAB 1.25  MGR',
-            'LASIX: TAB 20  MGR',
-            'ASAPROL: TAB 81  MGR'
-          ]}
-          patientName='Ana María Pérez González'
-          date='18/02/25'
-          ci='1704567890'
-          appointment='En 1 semana'
+          doctorName={prescriptionData.doctor.name}
+          email={prescriptionData.doctor.email}
+          phone={prescriptionData.doctor.phone}
+          medications={prescriptionData.medications}
+          patientName={prescriptionData.patient.name}
+          date={prescriptionData.patient.date}
+          ci={prescriptionData.patient.ci}
+          appointment={prescriptionData.patient.nextAppointment}
+          doctorSignature={prescriptionData.doctor.signature}
         />
 
         {/* Receta 2 - Indicaciones */}
         <PrescriptionCard
           type='indicaciones'
-          doctorName='Dr. Ricardo J González Soto'
-          email='funiscor2008@gmail.com'
-          phone='0999-123-456'
-          medications={[
-            'ATACAND O MINART O CANDER: 1 TAB DÍA 8  AM',
-            'NATRILIX AP: 1 TAB DÍA 10  AM',
-            'LASIX: 1 TAB DÍA 4  PM',
-            'ASAPROL: 1 TAB DÍA CON EL ALMUERZO'
-          ]}
-          patientName='Ana María Pérez González'
-          date='18/02/25'
-          ci='1704567890'
-          appointment='En 1 semana'
+          doctorName={prescriptionData.doctor.name}
+          email={prescriptionData.doctor.email}
+          phone={prescriptionData.doctor.phone}
+          medications={prescriptionData.indications || []}
+          patientName={prescriptionData.patient.name}
+          date={prescriptionData.patient.date}
+          ci={prescriptionData.patient.ci}
+          appointment={prescriptionData.patient.nextAppointment}
+          doctorSignature={prescriptionData.doctor.signature}
         />
       </View>
     </Page>

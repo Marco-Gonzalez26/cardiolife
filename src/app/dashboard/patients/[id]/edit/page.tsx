@@ -9,8 +9,9 @@ export default async function EditPatientPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = await params
+  const id = (await params).id
   const patient = (await getPatientById(id)) as PatientFormData
+  console.log('patient', patient)
   if (!patient || patient === null) {
     return <PatientNotFound />
   }

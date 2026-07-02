@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { DB_TABLES } from '../constants'
 import { ParaclinicalExamFormData } from '../validations/clinic-history'
 import { supabase } from '@/lib/supabase'
 
@@ -42,11 +43,11 @@ export async function createParaclinicalExam(
   data: CreateParaclinicalExamData
 ): Promise<ParaclinicalExam | null> {
   const { data: paraclinicalExam, error } = await supabase
-    .from('paraclinicalExam')
+    .from(DB_TABLES.PARACLINICAL_EXAM)
     .insert({
       rs: data.rs || null,
-      pWave: data.pWave || null,
-      bloodPreassure: data.bloodPreassure || null,
+      p_wave: data.pWave || null,
+      blood_pressure: data.bloodPreassure || null,
       qrs: data.qrs || null,
       axis: data.axis || null,
       qtc: data.qtc || null,
@@ -70,7 +71,7 @@ export async function getParaclinicalExamById(
 ): Promise<ParaclinicalExam | null> {
   try {
     const { data, error } = await supabase
-      .from('paraclinicalExam')
+      .from(DB_TABLES.PARACLINICAL_EXAM)
       .select('*')
       .eq('id', id)
       .single()
@@ -119,8 +120,8 @@ export async function updateParaclinicalExam(
     }
 
     const { data: paraclinicalExam, error } = await supabase
-      .from('paraclinicalExam')
-      .update(data)
+      .from(DB_TABLES.PARACLINICAL_EXAM)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()
@@ -141,7 +142,7 @@ export async function updateParaclinicalExam(
 
 export async function getAllParaclinicalExams() {
   const { data, error } = await supabase
-    .from('paraclinicalExam')
+    .from(DB_TABLES.PARACLINICAL_EXAM)
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -158,7 +159,7 @@ export async function getParaclinicalExamByClinicHistoryId(
   clinicHistoryId: string
 ) {
   const { data, error } = await supabase
-    .from('paraclinicalExam')
+    .from(DB_TABLES.PARACLINICAL_EXAM)
     .select('*')
     .eq('clinic_history_id', clinicHistoryId)
 

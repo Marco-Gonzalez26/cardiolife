@@ -16,6 +16,7 @@ export interface Antecedents {
   religion?: JsonData
   alcohol?: JsonData
   stroke?: JsonData
+  syncope?: JsonData
   diabetes?: JsonData
   cancer?: JsonData
   surgeries?: JsonData
@@ -42,6 +43,7 @@ export interface CreateAntecedentsData {
   religion?: JsonData
   alcohol?: JsonData
   stroke?: JsonData
+  syncope?: JsonData
   diabetes?: JsonData
   cancer?: JsonData
   surgeries?: JsonData
@@ -72,28 +74,29 @@ export async function createAntecedents(
   const { data: antecedents, error } = await supabase
     .from('antecedents')
     .insert({
-      currentDisease: data.currentDisease || null,
+      current_disease: data.currentDisease || null,
       hta: data.hta || null,
       cigarette: data.cigarette || null,
       exercise: data.exercise || null,
       religion: data.religion || null,
       alcohol: data.alcohol || null,
       stroke: data.stroke || null,
+      syncope: data.syncope || null,
       diabetes: data.diabetes || null,
       cancer: data.cancer || null,
       surgeries: data.surgeries || null,
-      heartDisease: data.heartDisease || null,
+      heart_disease: data.heartDisease || null,
       dyslipidemia: data.dyslipidemia || null,
-      thyroidDisease: data.thyroidDisease || null,
+      thyroid_disease: data.thyroidDisease || null,
       alergies: data.alergies || null,
       covid: data.covid || null,
       father: data.father || null,
       mother: data.mother || null,
-      gastricDisease: data.gastricDisease || null,
+      gastric_disease: data.gastricDisease || null,
       neuropathy: data.neuropathy || null,
-      cardiovascularDisease: data.cardiovascularDisease || null,
+      cardiovascular_disease: data.cardiovascularDisease || null,
       cardiac: data.cardiac || null,
-      kidneyDisease: data.kidneyDisease || null,
+      kidney_disease: data.kidneyDisease || null,
       drugs: data.drugs || null
     })
     .select()
@@ -141,7 +144,7 @@ export async function updateAntecedents(
     }
     const { data: antecedents, error } = await supabase
       .from('antecedents')
-      .update(data)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()

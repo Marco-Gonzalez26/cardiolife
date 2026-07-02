@@ -52,7 +52,7 @@ export function PatientForm({
       birthdate: defaultValues?.birthdate
         ? new Date(defaultValues?.birthdate)
         : new Date(),
-      phoneNumber: defaultValues?.phoneNumber || '',
+      phone_number: defaultValues?.phone_number || '',
       job: defaultValues?.job || '',
       email: defaultValues?.email || '',
       age: defaultValues?.age || ''
@@ -203,7 +203,7 @@ export function PatientForm({
 
           <FormField
             control={form.control}
-            name='phoneNumber'
+            name='phone_number'
             render={({ field }) => (
               <FormItem>
                 <FormLabel className='text-neutral-700 font-semibold'>

@@ -1,5 +1,8 @@
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
+import { cookies } from 'next/headers'
+
 import {
   Card,
   CardContent,
@@ -9,7 +12,12 @@ import {
 } from '@/components/ui/card'
 import { Heart, Users, FileText, Calendar } from 'lucide-react'
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const { data } = await supabase.auth.getClaims()
+
   return (
     <div className='min-h-screen '>
       <div className='absolute top-0 -z-10 h-full w-full bg-white'>
@@ -42,14 +50,25 @@ export default function Home() {
             Ricardo González
           </p>
           <div className='flex gap-4 justify-center'>
-            <Link href='/dashboard'>
-              <Button
-                size='lg'
-                className='text-lg font-semibold'
-                variant='default'>
-                Ingresar
-              </Button>
-            </Link>
+            {data === null ? (
+              <Link href='/login'>
+                <Button
+                  size='lg'
+                  className='text-lg font-semibold'
+                  variant='default'>
+                  Iniciar Sesión
+                </Button>
+              </Link>
+            ) : (
+              <Link href='/dashboard'>
+                <Button
+                  size='lg'
+                  className='text-lg font-semibold'
+                  variant='default'>
+                  Ingresar
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 

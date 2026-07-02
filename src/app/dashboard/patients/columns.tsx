@@ -22,7 +22,7 @@ export type ColumnsPatient = {
   names: string
   identification: string
   age: string
-  phoneNumber: string
+  phone_number: string
   lastnames: string
 }
 
@@ -84,7 +84,7 @@ export const columns: ColumnDef<ColumnsPatient>[] = [
     }
   },
   {
-    accessorKey: 'phoneNumber',
+    accessorKey: 'phone_number',
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title='Teléfono' />
     }

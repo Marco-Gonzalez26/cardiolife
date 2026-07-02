@@ -27,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
-export function PatientsDataTable<TData, TValue>({
+export function MedicationsDataTable<TData, TValue>({
   columns,
   data
 }: DataTableProps<TData, TValue>) {
@@ -43,18 +43,13 @@ export function PatientsDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
 
     globalFilterFn: (row, columnId, filterValue) => {
-      const names = row.getValue('names')?.toString().toLowerCase() || ''
-      const lastnames =
-        row.getValue('lastnames')?.toString().toLowerCase() || ''
-      const identification =
-        row.getValue('identification')?.toString().toLowerCase() || ''
+      const name = row.getValue('name')?.toString().toLowerCase() || ''
+      const genericName =
+        row.getValue('genericname')?.toString().toLowerCase() || ''
+
       const search = filterValue.toLowerCase()
 
-      return (
-        names.includes(search) ||
-        lastnames.includes(search) ||
-        identification.includes(search)
-      )
+      return name.includes(search) || genericName.includes(search)
     },
 
     onGlobalFilterChange: setGlobalFilter,
@@ -69,7 +64,7 @@ export function PatientsDataTable<TData, TValue>({
       <div className=' relative'>
         <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
         <Input
-          placeholder='Buscar por nombre, apellido o identificación...'
+          placeholder='Buscar por nombre comercial o nombre genérico'
           value={globalFilter ?? ''}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className='pl-10 h-11 max-w-sm'

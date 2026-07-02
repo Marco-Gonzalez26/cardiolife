@@ -4,22 +4,27 @@ import { supabase } from '@/lib/supabase'
 import { createAntecedents } from './antecedents-service'
 import { createPhysicalExam } from './physical-exam-service'
 import { createParaclinicalExam } from './paraclinical-exam-service'
+import { DB_TABLES } from '../constants'
 
 export interface ClinicHistory {
   id: string
   created_at: string
   date: string
   reason: string
-  treatmentPlan: string
-  antecedents: string
-  physicalExam: string
-  paraclinicalExam: string
+  treatment_plan: string
+  diagnosis: string
+  antecedents_id: string
+  physical_exam_id: string
+  paraclinical_exam_id: string
+  patient_id: string
 }
+
 
 export interface CreateClinicHistoryData {
   date: Date
   reason: string
   treatmentPlan: string
+  diagnosis: string
   antecedents: ClinicHistoryFormData['antecedents']
   physicalExam: ClinicHistoryFormData['physicalExam']
   paraclinicalExam: ClinicHistoryFormData['paraclinicalExam']
@@ -50,15 +55,16 @@ export async function createClinicHistory(
   }
 
   const { data: clinicHistory, error } = await supabase
-    .from('clinicHistory')
+    .from(DB_TABLES.CLINIC_HISTORY)
     .insert({
       patient: data.patientId,
       date: data.date,
       reason: data.reason,
-      treatmentPlan: data.treatmentPlan,
-      antecedents: antecedents.id,
-      physicalExam: physicalExam.id,
-      paraclinicalExam: paraclinicalExam.id
+      treatment_plan: data.treatmentPlan,
+      diagnosis: data.diagnosis,
+      antecedents_id: antecedents.id,
+      physical_exam_id: physicalExam.id,
+      paraclinical_exam_id: paraclinicalExam.id
     })
     .select()
     .single()
@@ -77,7 +83,7 @@ export async function getClinicHistoryById(
 ): Promise<ClinicHistory | null> {
   try {
     const { data, error } = await supabase
-      .from('clinicHistory')
+      .from(DB_TABLES.CLINIC_HISTORY)
       .select('*')
       .eq('id', id)
       .single()
@@ -110,8 +116,8 @@ export async function updateClinicHistory(
       updateData.treatmentPlan = updateData.treatmentPlan.trim()
     }
     const { data: clinicHistory, error } = await supabase
-      .from('clinicHistory')
-      .update(data)
+      .from(DB_TABLES.CLINIC_HISTORY)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()
@@ -132,7 +138,7 @@ export async function updateClinicHistory(
 
 export async function getAllClinicHistories() {
   const { data, error } = await supabase
-    .from('clinicHistory')
+    .from(DB_TABLES.CLINIC_HISTORY)
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -147,7 +153,7 @@ export async function getAllClinicHistories() {
 
 export async function getClinicHistoryByPatientId(patientId: string) {
   const { data, error } = await supabase
-    .from('clinicHistory')
+    .from(DB_TABLES.CLINIC_HISTORY)
     .select('*')
     .eq('patient_id', patientId)
 

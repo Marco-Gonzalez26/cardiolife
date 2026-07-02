@@ -51,7 +51,6 @@ export const ClinicHistoryForm = ({
   const [activeTab, setActiveTab] = useState(TABS.GENERAL)
 
   const form = useForm<ClinicHistoryFormData>({
-    
     resolver: zodResolver(clinicHistorySchema),
 
     defaultValues: {
@@ -83,6 +82,10 @@ export const ClinicHistoryForm = ({
         stroke: {
           status: defaultValues?.antecedents?.stroke?.status || false,
           details: defaultValues?.antecedents?.stroke?.details || ''
+        },
+        syncope: {
+          status: defaultValues?.antecedents?.syncope?.status || false,
+          details: defaultValues?.antecedents?.syncope?.details || ''
         },
         diabetes: {
           status: defaultValues?.antecedents?.diabetes?.status || false,
@@ -192,30 +195,31 @@ export const ClinicHistoryForm = ({
       form.setValue('physicalExam.imc', imc)
     }
   }
-  console.log(form.formState.errors, form.getValues())
+
   const antecedentFields = [
     { name: 'hta', label: 'Hipertensión Arterial (HTA)' },
     { name: 'diabetes', label: 'Diabetes' },
     { name: 'dyslipidemia', label: 'Dislipidemia' },
     { name: 'heartDisease', label: 'Enfermedad Cardíaca' },
     { name: 'stroke', label: 'Accidente Cerebrovascular (ACV)' },
+    { name: 'syncope', label: 'Síncope' },
     { name: 'thyroidDisease', label: 'Enfermedad Tiroidea' },
     { name: 'kidneyDisease', label: 'Enfermedad Renal' },
     { name: 'gastricDisease', label: 'Enfermedad Gástrica' },
     { name: 'cardiovascularDisease', label: 'Enfermedad Cardiovascular' },
     { name: 'neuropathy', label: 'Neuropatía' },
-    { name: 'syncope', label: 'Síncope' },
     { name: 'alergies', label: 'Alergias' },
     { name: 'covid', label: 'COVID-19' },
     { name: 'surgeries', label: 'Cirugías' },
-    { name: 'cigarrete', label: 'Tabaquismo' },
+    { name: 'cigarette', label: 'Tabaquismo' },
     { name: 'alcohol', label: 'Alcohol' },
     { name: 'drugs', label: 'Drogas' },
     { name: 'exercise', label: 'Ejercicio' },
     { name: 'religion', label: 'Religión' },
     { name: 'father', label: 'Antecedentes Paternos' },
     { name: 'mother', label: 'Antecedentes Maternos' },
-    { name: 'cardiac', label: 'Cardíaco' }
+    { name: 'cardiac', label: 'Cardíaco' },
+    { name: 'cancer', label: 'Cáncer' }
   ]
 
   useEffect(() => {
@@ -401,7 +405,6 @@ export const ClinicHistoryForm = ({
                         )}
                       />
 
-                      {/* Details Field - FUERA del FormField anterior */}
                       <FormField
                         control={form.control}
                         name={`antecedents.${field.name}.details` as any}

@@ -14,23 +14,35 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
+import {
+  MedicationCategoryInterface,
+  MedicationInterface
+} from '@/lib/services/medications-service'
 
-export type ColumnsMedication = {
-  id: string
-  created_at: string
-  names: string
-  identification: string
-  age: string
-  phoneNumber: string
-  lastnames: string
-}
+/*
+id: string
+  name: string
+  genericname: string
+  category: MedicationCategoryInterface
+  requiresmonitoring: boolean
+  notes: string
+  warnings: string
+  active: boolean
+*/
 
+export type ColumnsMedication = MedicationInterface
 export const columns: ColumnDef<ColumnsMedication>[] = [
   {
     accessorKey: 'id',
     enableSorting: false,
     header: '',
-    cell: ({ row }) => {}
+    cell: () => null
+  },
+  {
+    accessorKey: 'genericname',
+    enableColumnFilter: false,
+    header: '',
+    cell: () => null
   },
   {
     accessorKey: 'created_at',
@@ -47,54 +59,49 @@ export const columns: ColumnDef<ColumnsMedication>[] = [
     }
   },
   {
-    accessorKey: 'names',
+    accessorKey: 'name',
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Nombres' />
+      return <DataTableColumnHeader column={column} title='Nombre' />
     },
     cell: ({ row }) => {
-      const names = row.getValue('names') as string
-      return <p className='text-center truncate w-full'>{names}</p>
+      const name = row.getValue('name') as string
+      return <p className='text-center truncate w-full'>{name}</p>
     }
   },
   {
-    accessorKey: 'lastnames',
+    accessorKey: 'medicationcategories',
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Apellidos' />
+      return <DataTableColumnHeader column={column} title='Categoría' />
     },
     cell: ({ row }) => {
-      const lastnames = row.getValue('lastnames') as string
-      return <p className='text-center truncate w-full'>{lastnames}</p>
+      const category = row.getValue(
+        'medicationcategories'
+      ) as MedicationCategoryInterface
+      console.log({ category })
+      const categoryName = category?.name || "No tiene categoría" 
+
+      return <p className='text-center truncate w-full'>{categoryName}</p>
     }
   },
   {
-    accessorKey: 'identification',
+    accessorKey: 'active',
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Identificación' />
-    }
-  },
-  {
-    accessorKey: 'age',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Edad' />
+      return <DataTableColumnHeader column={column} title='Activo' />
     },
     cell: ({ row }) => {
-      const age = row.getValue('age') as string
-      return <p className='text-center truncate w-full'>{age}</p>
+      const active = row.getValue('active') as boolean
+      return (
+        <p className='text-center truncate w-full'>{active ? 'Si' : 'No'}</p>
+      )
     }
   },
-  {
-    accessorKey: 'phoneNumber',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Teléfono' />
-    }
-  },
+
   {
     id: 'actions',
     header: 'Acciones',
     cell: ({ row }) => {
-      const identication = row.getValue('identification') as string
       const id = row.getValue('id') as string
-
+      const active = row.getValue('active') as boolean
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild title='Abrir menú'>
@@ -105,28 +112,28 @@ export const columns: ColumnDef<ColumnsMedication>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(identication)}>
-              Copiar identificación
-            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}`}>Ver paciente</Link>
+              <Link href={`/dashboard/medications/${id}`}>Ver medicamento</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/edit`}>
-                Editar paciente
+              <Link href={`/dashboard/medications/${id}/edit`}>
+                Editar medicamento
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/clinic-history`}>
-                Historia clínica
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/clinic-evolution/new`}>
-                Crear evolución
-              </Link>
+              {active ? (
+                <Link
+                  href={`/dashboard/medications/${id}/disable`}
+                  className='text-red-500 '>
+                  Desactivar medicamento
+                </Link>
+              ) : (
+                <Link href={`/dashboard/medications/${id}/enable`}>
+                  Activar medicamento
+                </Link>
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

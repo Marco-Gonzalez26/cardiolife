@@ -26,6 +26,8 @@ import {
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { AppSection } from '@/components/app-section'
+import { formatDate } from '@/lib/utils'
+import { DB_TABLES } from '@/lib/constants'
 
 interface ClinicHistoryPreview {
   id: number
@@ -42,41 +44,34 @@ interface Patient {
   identification: string
   birthdate: string
   age: string
-  phoneNumber?: string
+  phone_number?: string
   job?: string
 }
 
 export default async function PatientViewPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const supabase = createClient()
-
+  const patientId = (await params).id
   const { data: patient, error: patientError } = await supabase
     .from('patient')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', patientId)
     .single()
 
   if (patientError || !patient) {
-    redirect('/patients')
+    redirect('/dashboard/patients')
   }
 
   const { data: clinicHistories } = await supabase
-    .from('clinicHistory')
+    .from(DB_TABLES.CLINIC_HISTORY)
     .select('id, date, reason, treatmentPlan')
-    .eq('patient', params.id)
+    .eq('patient', patientId)
     .order('date', { ascending: false })
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return 'No especificada'
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
+  
 
   const latestHistory = clinicHistories?.[0]
 
@@ -90,7 +85,7 @@ export default async function PatientViewPage({
               Volver a Pacientes
             </Button>
           </Link>
-          <Link href={`/dashboard/patients/${params.id}/edit`}>
+          <Link href={`/dashboard/patients/${patientId}/edit`}>
             <Button>
               <Edit className='mr-2 h-4 w-4' />
               Editar Paciente
@@ -163,7 +158,7 @@ export default async function PatientViewPage({
                       Teléfono
                     </p>
                     <p className='text-sm text-neutral-600'>
-                      {patient.phoneNumber || 'No registrado'}
+                      {patient.phone_number || 'No registrado'}
                     </p>
                   </div>
                 </div>
@@ -208,10 +203,9 @@ export default async function PatientViewPage({
                   <CardTitle className='text-lg text-neutral-900'>
                     Historia Clínica
                   </CardTitle>
-
                 </div>
 
-                <Link href={`/patients/${params.id}/clinic-history`}>
+                <Link href={`/patients/${patientId}/clinic-history`}>
                   <Button variant='outline' className='border-neutral-300'>
                     <FileText className='mr-2 h-4 w-4' />
                     Ver Todas
@@ -226,7 +220,7 @@ export default async function PatientViewPage({
                       Este paciente no tiene historia clínica registrada
                     </p>
                     <Link
-                      href={`/dashboard/patients/${params.id}/clinic-history/new`}>
+                      href={`/dashboard/patients/${patientId}/clinic-history/new`}>
                       <Button>
                         <Plus className='mr-2 h-4 w-4' />
                         Crear Historia
@@ -239,7 +233,7 @@ export default async function PatientViewPage({
                       <div className='p-4 bg-neutral-50 rounded-lg border border-neutral-200'>
                         <div className='flex items-start justify-between mb-2'>
                           <h4 className='font-semibold text-neutral-900'>
-                            Registro de Historia 
+                            Registro de Historia
                           </h4>
                           <Badge variant='secondary' className='bg-neutral-200'>
                             {formatDate(latestHistory.date)}
@@ -266,17 +260,18 @@ export default async function PatientViewPage({
                           )}
                         </div>
                         <Link
-                          href={`/patients/${params.id}/clinic-history/${latestHistory.id}`}>
+                          href={`/patients/${patientId}/clinic-history/${latestHistory.id}`}>
                           <Button
                             variant='ghost'
                             className='mt-2  h-auto text-neutral-900 hover:cursor-pointer'>
-                            Ver detalles completos <ArrowRight className='ml-1 h-4 w-4' />
+                            Ver detalles completos{' '}
+                            <ArrowRight className='ml-1 h-4 w-4' />
                           </Button>
                         </Link>
                       </div>
                     )}
 
-                    <Link href={`/patients/${params.id}/clinic-evolution/new`}>
+                    <Link href={`/patients/${patientId}/clinic-evolution/new`}>
                       <Button
                         variant='outline'
                         className='w-full border-neutral-300 border-dashed'>

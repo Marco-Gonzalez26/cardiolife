@@ -12,7 +12,7 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { loginWithCode } from '@/lib/services/auth-service'
+import { loginWithCode } from '@/actions/auth'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -25,8 +25,9 @@ import {
 import { Eye, EyeClosed } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+
 const loginFormSchema = z.object({
-  email: z.string().email({ message: 'Por favor ingresa un email válido' }),
+  email: z.email({ message: 'Por favor ingresa un email válido' }),
   password: z.string().min(8, {
     message: 'La contraseña debe tener al menos 8 caracteres'
   })
@@ -54,11 +55,6 @@ export default function Login() {
       return
     }
 
-    if (user) {
-      setLoading(false)
-      toast.success('Sesion iniciada correctamente, redirigiendo...')
-      router.push('/dashboard')
-    }
   }
 
   return (

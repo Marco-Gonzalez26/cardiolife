@@ -1,51 +1,35 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use server'
 
-import { supabase } from '@/lib/supabase'
+import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { calculateAge } from '@/lib/validations/patient'
+import { DB_TABLES } from '../constants'
+import type {
+  Patient,
+  CreatePatientData,
+  UpdatePatientData
+} from '@/types/patient'
 
-export interface Patient {
-  id: string
-  created_at: string
-  names: string
-  lastnames: string
-  identification: string
-  birthdate: Date | string
-  age: string
-  phoneNumber?: string
-  job?: string
-  email?: string
+const getSupabase = async () => {
+  const cookieStore = await cookies()
+  return createClient(cookieStore)
 }
-
-export interface CreatePatientData {
-  names: string
-  lastnames: string
-  identification: string
-  birthdate: string
-  phoneNumber: string
-  job: string
-  email?: string
-}
-
-export type UpdatePatientData = Partial<CreatePatientData>
-
-/**
- *  Create patient
- */
 
 export async function createPatient(
   data: CreatePatientData
 ): Promise<Patient | null> {
+  const supabase = await getSupabase()
   const age = calculateAge(new Date(data.birthdate))
 
   const { data: patient, error } = await supabase
-    .from('patient')
+    .from(DB_TABLES.PATIENTS)
     .insert({
       names: data.names,
       lastnames: data.lastnames,
       identification: data.identification,
       birthdate: data.birthdate,
       age: age.toString(),
-      phoneNumber: data.phoneNumber || null,
+      phone_number: data.phone_number || null,
       job: data.job || null,
       email: data.email || null
     })
@@ -53,87 +37,72 @@ export async function createPatient(
     .single()
 
   if (error) throw new Error(error.message)
-
   return patient
 }
 
-/**
- *  Get  patient by id
- */
-
 export async function getPatientById(id: string): Promise<Patient | null> {
   try {
+    const supabase = await getSupabase()
     const { data, error } = await supabase
-      .from('patient')
+      .from(DB_TABLES.PATIENTS)
       .select('*')
       .eq('id', id)
       .single()
-    if (error) throw new Error(error.message)
 
+    if (error) throw new Error(error.message)
     return data
-  } catch (error) {
+  } catch {
     return null
   }
 }
-
-/**
- *  Update patient
- */
 
 export async function updatePatient(id: string, data: UpdatePatientData) {
-  console.log('update patient', data)
   try {
+    const supabase = await getSupabase()
     const updateData: any = { ...data }
+
     if (updateData.birthdate) {
-      const age = calculateAge(new Date(updateData.birthdate))
-      updateData.age = age.toString()
+      updateData.age = calculateAge(new Date(updateData.birthdate)).toString()
     }
+
     const { data: patient, error } = await supabase
-      .from('patient')
-      .update(data)
+      .from(DB_TABLES.PATIENTS)
+      .update(updateData)
       .eq('id', id)
       .select()
-      .single()
+      .maybeSingle()
 
-    if (error) {
-      throw new Error(error.message)
-    }
-
-    return patient
+    if (error) throw new Error(error.message)
+    return { patient, error: null }
   } catch (error) {
-    return null
+    return {
+      patient: null,
+      error: error instanceof Error ? error.message : 'Error al actualizar'
+    }
   }
 }
 
-/**
- * Get all patients
- */
-
 export async function getAllPatients() {
+  const supabase = await getSupabase()
   const { data, error } = await supabase
-    .from('patient')
+    .from(DB_TABLES.PATIENTS)
     .select('*')
     .order('created_at', { ascending: false })
 
   if (error) throw new Error(error.message)
-
   return data || []
 }
-
-/**
- * Validate if identification is unique
- */
 
 export async function validateIdentification(
   identification: string
 ): Promise<boolean> {
+  const supabase = await getSupabase()
   const { data, error } = await supabase
-    .from('patient')
+    .from(DB_TABLES.PATIENTS)
     .select('id')
     .eq('identification', identification)
-    .single()
+    .maybeSingle()
 
   if (error) throw new Error(error.message)
-
-  return data ? false : true
+  return data === null
 }

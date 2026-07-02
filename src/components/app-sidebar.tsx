@@ -1,3 +1,4 @@
+'use client'
 import {
   Settings,
   ChartNoAxesCombined,
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import { AppSidebarHeader } from '@/components/app-sidebar-header'
+import { usePathname } from 'next/navigation'
 
 const sidebarItems = [
   {
@@ -31,7 +33,7 @@ const sidebarItems = [
   },
   {
     name: 'Recetas',
-    href: '/dashboard/prescriptions',
+    href: '/dashboard/recipes',
     icon: FileHeart
   },
   {
@@ -48,6 +50,7 @@ const sidebarItems = [
 ]
 
 export const AppSidebar = () => {
+  const pathname = usePathname()
   return (
     <Sidebar collapsible='icon' variant='sidebar'>
       <SidebarHeader className='p-2'>
@@ -55,7 +58,9 @@ export const AppSidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButton asChild title='Abrir menú'>
               <Link href='/dashboard' prefetch title='Abrir menú'>
-                <AppSidebarHeader />
+                <>
+                  <AppSidebarHeader />
+                </>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -81,9 +86,7 @@ export const AppSidebar = () => {
       <SidebarFooter className='p-2'>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild title='Cerrar menú'>
-              
-            </SidebarMenuButton>
+            <SidebarMenuButton asChild title='Cerrar menú'></SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

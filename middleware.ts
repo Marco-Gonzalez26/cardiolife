@@ -1,12 +1,13 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server'
-
+import { createClient as createSupabaseServerClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   console.log('entro en middleware')
   try {
     const res = NextResponse.next()
-    const supabase = await createSupabaseServerClient()
+    const cookiesStore = await cookies()
+    const supabase = await createSupabaseServerClient(cookiesStore)
 
     const {
       data: { session },
@@ -20,10 +21,7 @@ export async function middleware(request: NextRequest) {
     )
 
     if (isProtected && !session) {
-      //TODO: redirect to login
-      return NextResponse.next()
-
-      // return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL('/login', request.url))
     }
 
     const authRoutes = ['/login']
