@@ -67,13 +67,11 @@
 
 ## 3. TRAZABILIDAD (Issue → PR → Commit → Release)
 
-## ✅ 3. TRAZABILIDAD (Issue → PR → Commit → Release)
-
 | Issue                    | PR        | Commits   | Release | Estado        |
 | ------------------------ | --------- | --------- | ------- | ------------- |
-| #1 [AUDIT] Configuración | Pendiente | Pendiente | v1.0.0  | 🔄 En proceso |
-| #2 [AUDIT] Autenticación | Pendiente | Pendiente | v1.0.0  | 🔄 En proceso |
-| #3 [RELEASE] v1.0.0      | -         | -         | v1.0.0  | 🔄 Por crear  |
+| #2 [AUDIT] Configuración | PR #6     | 13f78e0   | v1.0.0  | ✅ Merged     |
+| #1 [AUDIT] Autenticación | Pendiente | Pendiente | v1.0.0  | 🔄 En proceso |
+| #3 [RELEASE] v1.0.0      | -         | -         | v1.0.0  | ✅ Created    |
 | #4 [CONTROL] Checklist   | Pendiente | Pendiente | v1.0.0  | 🔄 En proceso |
 
 ---
