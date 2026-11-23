@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Control del Doctor - Cardiolife</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0ea5e9',
+                            foreground: '#ffffff',
+                        },
+                        destructive: {
+                            DEFAULT: '#ef4444',
+                            foreground: '#ffffff',
+                        },
+                        muted: {
+                            DEFAULT: '#f1f5f9',
+                            foreground: '#64748b',
+                        },
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-slate-200 bg-white p-4">
+<div class="mb-8 flex items-center gap-3 px-2">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+<span class="material-symbols-outlined fill text-primary" data-icon="monitor_heart">monitor_heart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold tracking-tight text-slate-900">Cardiolife</span>
+<span class="text-xs text-slate-500">Medical Management</span>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 rounded-md bg-slate-100 px-3 py-2 text-sm font-medium text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Patients
+            </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Appointments
+            </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="online_prediction">online_prediction</span>
+                AI Predictions
+            </a>
+</nav>
+<div class="mt-auto">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed right-0 top-0 z-40 flex h-16 w-[calc(100%-16rem)] items-center justify-between border-b border-slate-200 bg-white px-8">
+<div class="flex flex-1 items-center gap-4">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400" data-icon="search">search</span>
+<input class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 pl-9 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" placeholder="Buscar paciente..." type="search"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-destructive"></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-medium leading-none text-slate-900">Dr. Julian Vance</p>
+<p class="text-xs text-slate-500 mt-1">Cardiólogo Jefe</p>
+</div>
+<img alt="Doctor profile" class="h-9 w-9 rounded-full object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1Z-cetWkzSKP9iE0iYI-PeZQ6qyS3i92PhDjUCnUofye9cFoT7mb8dzOhON7A0bpMYb3eBn5J33CxJB9yOht2DycMixRe7FMMrccoXvPfQ6qbfVfKVd-1soZos7YftPz2wy0Q4yaun3cRUYnag9P6DPTwhLcIv9DHb95eZy-7mOSjZQr8RTAqLqm9lvbdkq9cHsq8ybbmhm8Gii22i_McgQ8jNFETlxmiUMWNZioklAHKMC_l1g"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 min-h-[calc(100vh-4rem)] p-8">
+<div class="mb-8 flex flex-col gap-2">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900">Panel de Control</h2>
+<p class="text-slate-500">Visión general de pacientes para hoy, 24 Octubre 2023.</p>
+</div>
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+<!-- Left Column: Patient List (Takes up 2 columns on XL) -->
+<div class="flex flex-col gap-6 xl:col-span-2">
+<div class="rounded-xl border border-slate-200 bg-white text-slate-950 shadow-sm">
+<div class="flex flex-col space-y-1.5 p-6 pb-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-semibold leading-none tracking-tight">Pacientes del Día</h3>
+<div class="flex items-center gap-2">
+<button class="inline-flex h-8 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs font-medium shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900">
+                                    Todos
+                                </button>
+<button class="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-xs font-medium text-white shadow transition-colors hover:bg-primary/90">
+                                    Críticos
+                                </button>
+</div>
+</div>
+</div>
+<div class="p-0">
+<div class="relative w-full overflow-auto">
+<table class="w-full caption-bottom text-sm">
+<thead>
+<tr class="border-b border-slate-200 transition-colors hover:bg-slate-50/50 data-[state=selected]:bg-slate-50">
+<th class="h-10 px-6 text-left align-middle font-medium text-slate-500">Paciente</th>
+<th class="h-10 px-6 text-left align-middle font-medium text-slate-500">Motivo</th>
+<th class="h-10 px-6 text-left align-middle font-medium text-slate-500">Estado</th>
+<th class="h-10 px-6 text-right align-middle font-medium text-slate-500">Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-slate-200 transition-colors hover:bg-slate-50/50">
+<td class="p-6 align-middle">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-sm font-semibold text-red-700">MR</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900">María Rodríguez</span>
+<span class="text-xs text-slate-500">09:00 AM</span>
+</div>
+</div>
+</td>
+<td class="p-6 align-middle text-slate-600">Revisión Post-Operatoria</td>
+<td class="p-6 align-middle">
+<div class="inline-flex items-center rounded-full border border-transparent bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 transition-colors">
+<span class="material-symbols-outlined mr-1 !text-[14px]" data-icon="warning">warning</span>
+                                                Riesgo Alto
+                                            </div>
+</td>
+<td class="p-6 align-middle text-right">
+<button class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="medical_information">medical_information</span>
+</button>
+</td>
+</tr>
+<tr class="border-b border-slate-200 transition-colors hover:bg-slate-50/50">
+<td class="p-6 align-middle">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">JP</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900">Juan Pérez</span>
+<span class="text-xs text-slate-500">10:30 AM</span>
+</div>
+</div>
+</td>
+<td class="p-6 align-middle text-slate-600">Consulta de Rutina</td>
+<td class="p-6 align-middle">
+<div class="inline-flex items-center rounded-full border border-transparent bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 transition-colors">
+                                                Estable
+                                            </div>
+</td>
+<td class="p-6 align-middle text-right">
+<button class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="medical_information">medical_information</span>
+</button>
+</td>
+</tr>
+<tr class="transition-colors hover:bg-slate-50/50">
+<td class="p-6 align-middle">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">CL</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900">Carlos López</span>
+<span class="text-xs text-slate-500">11:45 AM</span>
+</div>
+</div>
+</td>
+<td class="p-6 align-middle text-slate-600">Resultados de Laboratorio</td>
+<td class="p-6 align-middle">
+<div class="inline-flex items-center rounded-full border border-transparent bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-800 transition-colors">
+                                                Pendiente
+                                            </div>
+</td>
+<td class="p-6 align-middle text-right">
+<button class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined" data-icon="medical_information">medical_information</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: AI Risk Alerts -->
+<div class="xl:col-span-1">
+<div class="rounded-xl border border-slate-200 bg-white text-slate-950 shadow-sm sticky top-24">
+<div class="flex flex-col space-y-1.5 p-6 border-b border-slate-100">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+<h3 class="text-lg font-semibold leading-none tracking-tight">Alertas de Riesgo IA</h3>
+</div>
+<p class="text-sm text-slate-500 pt-2">El modelo predictivo ha detectado anomalías recientes en pacientes monitoreados.</p>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<!-- AI Alert Card -->
+<div class="rounded-lg border border-red-100 bg-red-50/50 p-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+</span>
+<span class="text-sm font-semibold text-red-900">María Rodríguez</span>
+</div>
+<span class="text-[10px] font-medium uppercase tracking-wider text-red-600">Hace 15 min</span>
+</div>
+<p class="text-sm text-red-800/80 mb-4">Arritmia detectada y fluctuación inusual en la presión arterial durante la noche.</p>
+<button class="inline-flex w-full items-center justify-center rounded-md bg-red-600 h-9 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-red-600/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-700">
+                                Revisar Signos Vitales
+                            </button>
+</div>
+<!-- AI Alert Card (Warning) -->
+<div class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="h-2.5 w-2.5 rounded-full bg-slate-400"></span>
+<span class="text-sm font-semibold text-slate-900">Roberto Gómez</span>
+</div>
+<span class="text-[10px] font-medium uppercase tracking-wider text-slate-500">Hace 2 horas</span>
+</div>
+<p class="text-sm text-slate-600 mb-4">Patrón de sueño irregular. Ligera desviación del ritmo cardíaco base (no crítica).</p>
+<button class="inline-flex w-full items-center justify-center rounded-md border border-slate-200 bg-white h-9 px-4 py-2 text-sm font-medium text-slate-900 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950">
+                                Ver Detalles
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

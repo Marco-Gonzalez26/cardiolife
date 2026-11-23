@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Historia Clínica Electrónica - Cardiolife</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dadc",
+                        "on-surface": "#191c1e",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-container": "#00b17b",
+                        "outline": "#6e7881",
+                        "on-primary-container": "#003751",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary-container": "#0ea5e9",
+                        "surface-container": "#eceef0",
+                        "surface-tint": "#006591",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "secondary": "#565e74",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "surface-container-low": "#f2f4f6",
+                        "outline-variant": "#bec8d2",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#c9e6ff",
+                        "primary": "#006591",
+                        "surface": "#f7f9fb",
+                        "inverse-primary": "#89ceff",
+                        "background": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-container": "#dae2fd",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#dae2fd",
+                        "on-secondary-container": "#5c647a",
+                        "on-primary-fixed": "#001e2f",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "tertiary": "#006c49",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-container": "#003b26",
+                        "on-background": "#191c1e",
+                        "on-surface-variant": "#3e4850",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "48px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "md": "24px",
+                        "margin-desktop": "40px",
+                        "xs": "8px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="bg-on-secondary-fixed dark:bg-on-secondary-fixed h-screen w-64 fixed left-0 top-0 shadow-md hidden md:flex flex-col py-lg px-sm z-20">
+<div class="mb-lg px-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary-fixed text-[32px]">monitor_heart</span>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary-fixed dark:text-primary-fixed">Cardiolife</h1>
+<p class="text-label-md font-label-md text-secondary-fixed-dim">Medical Management</p>
+</div>
+</div>
+<ul class="flex flex-col gap-xs flex-1">
+<li class="">
+<a class="flex items-center gap-sm px-sm py-[12px] rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-sm px-sm py-[12px] rounded-lg text-primary-fixed-dim font-bold border-l-4 border-primary-fixed-dim bg-on-secondary-fixed-variant/20 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-sm px-sm py-[12px] rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-md font-label-md">Appointments</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-sm px-sm py-[12px] rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">online_prediction</span>
+<span class="text-label-md font-label-md">AI Predictions</span>
+</a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-sm px-sm py-[12px] rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest dark:bg-surface-container-lowest border-b border-surface-variant fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] h-16 flex justify-between items-center px-gutter md:ml-64 z-10 transition-colors">
+<div class="flex items-center gap-sm md:hidden">
+<span class="material-symbols-outlined text-primary text-[28px]">monitor_heart</span>
+<span class="text-title-lg font-title-lg font-bold text-on-surface dark:text-on-surface">Cardiolife</span>
+</div>
+<div class="hidden md:flex items-center relative">
+<span class="material-symbols-outlined text-outline absolute left-3 top-1/2 -translate-y-1/2 text-sm">search</span>
+<input class="bg-surface border border-surface-variant rounded-md pl-9 pr-4 py-2 text-sm text-on-surface w-[300px] placeholder:text-outline-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" placeholder="Buscar paciente..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-on-surface p-2 rounded-md transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>
+</button>
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium text-on-surface">Dr. Julian Vance</p>
+<p class="text-xs text-on-surface-variant">Cardiólogo</p>
+</div>
+<img alt="User profile picture" class="w-9 h-9 rounded-full object-cover border border-surface-variant" data-alt="A professional headshot of a male doctor in his 40s wearing a white coat and a light blue stethoscope around his neck. The background is a slightly blurred, modern clinical setting with soft, high-key lighting emphasizing a pristine, sterile yet approachable medical environment. The color palette is bright and neutral, aligning with a high-end corporate medical UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfDRPQYa2DnZc0vhbAFSQhXLpPBjQNYrbhYEbtFagtUFYgFnncl4aNwS_v8vo-MRgvzK1RYK0Mf0TB_e5SYX26rtlBVJ0iErmGmWOeBX97fU1Q53D_a_s6ehABJH6NLj6VtepSZzcbzuQz5ZvWPIOJk0bWBoEjsxbtO-BXoXI7WOhdlV7yb-nN6HDDsR3opMnKkXj2CZq2LpMpM1kAFvitDyC9pJChQeeTFeCCgEmfgjzLtQTbcA"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="w-full md:ml-64 pt-24 px-margin-mobile md:px-margin-desktop pb-xl min-h-screen bg-background">
+<!-- Patient Header Context -->
+<div class="bg-surface-container-lowest rounded-lg border border-surface-variant mb-8 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Carlos Mendoza Ruiz</h2>
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-on-surface-variant">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">badge</span> ID: 4598-CM</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">cake</span> 58 años (12/04/1965)</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">bloodtype</span> O+</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-2 md:mt-0">
+<span class="inline-flex items-center rounded-md border border-tertiary/20 bg-tertiary/10 px-2.5 py-0.5 text-xs font-semibold text-tertiary transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+<span class="material-symbols-outlined text-[14px] mr-1">check_circle</span> Estable
+                </span>
+<span class="inline-flex items-center rounded-md border border-surface-variant bg-surface px-2.5 py-0.5 text-xs font-semibold text-on-surface-variant transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+<span class="material-symbols-outlined text-[14px] mr-1">history</span> Últ. visita: 05 Nov 2023
+                </span>
+</div>
+</div>
+<!-- HCE Title & Tabs Container -->
+<div class="mb-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-semibold tracking-tight text-on-surface">Historia Clínica Electrónica</h3>
+<button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-on-primary hover:bg-primary/90 h-10 px-4 py-2 gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span> Guardar HCE
+                </button>
+</div>
+<!-- Tabs -->
+<div class="w-full">
+<div class="inline-flex h-10 items-center justify-center rounded-md bg-surface-variant p-1 text-on-surface-variant mb-6">
+<button class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-surface-container-lowest text-on-surface shadow-sm gap-2">
+<span class="material-symbols-outlined text-[16px]">stethoscope</span> Examen Físico
+                    </button>
+<button class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-on-surface gap-2">
+<span class="material-symbols-outlined text-[16px]">biotech</span> Exámenes Paraclínicos
+                    </button>
+<button class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-on-surface gap-2">
+<span class="material-symbols-outlined text-[16px]">history_edu</span> Antecedentes
+                    </button>
+<button class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-on-surface gap-2">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> Evolución Clínica
+                    </button>
+</div>
+</div>
+</div>
+<!-- Tab Content: Examen Físico (Bento Grid Layout) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Vitals Column (Left) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<div class="rounded-lg border border-surface-variant bg-surface-container-lowest text-on-surface shadow-sm">
+<div class="flex flex-col space-y-1.5 p-6 pb-4">
+<h3 class="font-semibold leading-none tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">vital_signs</span> Signos Vitales
+                        </h3>
+</div>
+<div class="p-6 pt-0">
+<div class="grid grid-cols-2 gap-4">
+<!-- TA -->
+<div class="rounded-lg border border-surface-variant bg-surface p-3">
+<label class="text-xs font-medium text-on-surface-variant block mb-1">Tensión Arterial</label>
+<div class="flex items-baseline gap-1">
+<input class="w-full bg-transparent border-b border-surface-variant focus:border-primary focus:outline-none focus:ring-0 px-0 py-0.5 text-xl font-semibold text-on-surface h-8" type="text" value="130/85"/>
+<span class="text-xs text-on-surface-variant">mmHg</span>
+</div>
+</div>
+<!-- FC -->
+<div class="rounded-lg border border-surface-variant bg-surface p-3">
+<label class="text-xs font-medium text-on-surface-variant block mb-1">Frec. Cardíaca</label>
+<div class="flex items-baseline gap-1">
+<input class="w-full bg-transparent border-b border-surface-variant focus:border-primary focus:outline-none focus:ring-0 px-0 py-0.5 text-xl font-semibold text-on-surface h-8" type="text" value="78"/>
+<span class="text-xs text-on-surface-variant">lpm</span>
+</div>
+</div>
+<!-- SatO2 -->
+<div class="rounded-lg border border-surface-variant bg-surface p-3">
+<label class="text-xs font-medium text-on-surface-variant block mb-1">Saturación O2</label>
+<div class="flex items-baseline gap-1">
+<input class="w-full bg-transparent border-b border-surface-variant focus:border-primary focus:outline-none focus:ring-0 px-0 py-0.5 text-xl font-semibold text-on-surface h-8" type="text" value="98"/>
+<span class="text-xs text-on-surface-variant">%</span>
+</div>
+</div>
+<!-- Peso -->
+<div class="rounded-lg border border-surface-variant bg-surface p-3">
+<label class="text-xs font-medium text-on-surface-variant block mb-1">Peso</label>
+<div class="flex items-baseline gap-1">
+<input class="w-full bg-transparent border-b border-surface-variant focus:border-primary focus:outline-none focus:ring-0 px-0 py-0.5 text-xl font-semibold text-on-surface h-8" type="text" value="82.5"/>
+<span class="text-xs text-on-surface-variant">kg</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Assessment Area (Right) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Cardiovascular -->
+<div class="rounded-lg border border-surface-variant bg-surface-container-lowest text-on-surface shadow-sm">
+<div class="flex flex-col space-y-1.5 p-6 border-b border-surface-variant flex-row justify-between items-center">
+<h3 class="font-semibold leading-none tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">favorite</span> Sistema Cardiovascular
+                        </h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-on-surface">Ritmo Cardíaco</label>
+<select class="flex h-10 w-full items-center justify-between rounded-md border border-surface-variant bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+<option>Regular (Sinusal)</option>
+<option>Irregular</option>
+<option>Arritmia</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-on-surface">Soplos</label>
+<select class="flex h-10 w-full items-center justify-between rounded-md border border-surface-variant bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+<option>Ausentes</option>
+<option>Sistólico</option>
+<option>Diastólico</option>
+</select>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-on-surface">Hallazgos Detallados</label>
+<textarea class="flex min-h-[80px] w-full rounded-md border border-surface-variant bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-outline-variant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none" placeholder="Describa ruidos cardíacos, ingurgitación yugular, edema periférico, etc." rows="3">Ruidos cardíacos rítmicos, de buena intensidad. No se auscultan soplos ni galope. Pulsos periféricos presentes y simétricos. No hay edema en miembros inferiores.</textarea>
+</div>
+</div>
+</div>
+<!-- Respiratorio -->
+<div class="rounded-lg border border-surface-variant bg-surface-container-lowest text-on-surface shadow-sm">
+<div class="flex flex-col space-y-1.5 p-6 border-b border-surface-variant flex-row justify-between items-center">
+<h3 class="font-semibold leading-none tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">pulmonology</span> Sistema Respiratorio
+                        </h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<div class="p-6">
+<div class="space-y-2">
+<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-on-surface">Auscultación Pulmonar</label>
+<textarea class="flex min-h-[80px] w-full rounded-md border border-surface-variant bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-outline-variant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none" placeholder="Murmullo vesicular, estertores, sibilancias..." rows="2">Murmullo vesicular conservado en ambos campos pulmonares. No se auscultan ruidos agregados.</textarea>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
