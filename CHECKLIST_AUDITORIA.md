@@ -66,7 +66,7 @@
 ---
 
 ## 3. TRAZABILIDAD (Issue → PR → Commit → Release)
-
+1. Usted mejor
 | Issue                    | PR        | Commits   | Release | Estado        |
 | ------------------------ | --------- | --------- | ------- | ------------- |
 | #2 [AUDIT] Configuración | PR #6     | 13f78e0   | v1.0.0  | ✅ Merged     |

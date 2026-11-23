@@ -1,136 +1,150 @@
 'use client'
 
-import { ColumnDef } from '@tanstack/react-table'
-import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
-import { MoreHorizontal } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
-import { getClinicHistoryByPatientId } from '@/lib/services/clinic-history-service'
+import { ColumnDef } from '@tanstack/react-table'
+import { CalendarPlus, Eye, Pencil } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import type { PatientListItem } from '@/types/patient'
+import { formatDate } from '@/lib/format-date'
 
-export type ColumnsPatient = {
-  id: string
-  created_at: string
-  names: string
-  identification: string
-  age: string
-  phone_number: string
-  lastnames: string
+export type ColumnsPatient = PatientListItem
+
+const getInitials = (names: string, lastnames: string) =>
+  `${names[0] ?? ''}${lastnames[0] ?? ''}`.toUpperCase()
+
+const RISK_STYLES: Record<string, string> = {
+  Alto: 'bg-red-100 text-red-800 hover:bg-red-100',
+  Medio: 'bg-amber-100 text-amber-800 hover:bg-amber-100',
+  Bajo: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100'
 }
 
+const ActionLink = ({
+  href,
+  title,
+  className,
+  children
+}: {
+  href: string
+  title: string
+  className?: string
+  children: React.ReactNode
+}) => (
+  <Button
+    asChild
+    variant='ghost'
+    size='icon'
+    title={title}
+    className={cn('size-8', className)}>
+    <Link href={href} aria-label={title}>
+      {children}
+    </Link>
+  </Button>
+)
+
 export const columns: ColumnDef<ColumnsPatient>[] = [
-  {
-    accessorKey: 'id',
-    enableSorting: false,
-    header: '',
-    cell: ({ row }) => {}
-  },
+  // Columna oculta: solo sirve para ordenar por "Más recientes"
   {
     accessorKey: 'created_at',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Fecha de creación' />
-    },
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('created_at'))
-      const formattedDate = new Intl.DateTimeFormat('es-EC', {
-        dateStyle: 'short'
-      }).format(date)
-
-      return <p className='text-center   '>{formattedDate}</p>
-    }
-  },
-  {
-    accessorKey: 'names',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Nombres' />
-    },
-    cell: ({ row }) => {
-      const names = row.getValue('names') as string
-      return <p className='text-center truncate w-full'>{names}</p>
-    }
+    header: 'Registrado',
+    cell: () => null
   },
   {
     accessorKey: 'lastnames',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Apellidos' />
-    },
+    header: 'Nombre',
     cell: ({ row }) => {
-      const lastnames = row.getValue('lastnames') as string
-      return <p className='text-center truncate w-full'>{lastnames}</p>
+      const patient = row.original
+      return (
+        <div className='flex items-center gap-3'>
+          <div className='flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-secondary-foreground'>
+            {getInitials(patient.names, patient.lastnames)}
+          </div>
+          <div className='min-w-0'>
+            <p className='truncate font-semibold text-foreground'>
+              {patient.names} {patient.lastnames}
+            </p>
+            <p className='truncate text-sm text-muted-foreground'>
+              {patient.job || patient.phone_number || '—'}
+            </p>
+          </div>
+        </div>
+      )
     }
   },
   {
     accessorKey: 'identification',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Identificación' />
-    }
+    header: 'Cédula',
+    cell: ({ row }) => (
+      <span className='text-muted-foreground'>
+        {row.original.identification || '—'}
+      </span>
+    )
   },
   {
     accessorKey: 'age',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Edad' />
-    },
-    cell: ({ row }) => {
-      const age = row.getValue('age') as string
-      return <p className='text-center truncate w-full'>{age}</p>
-    }
+    header: 'Edad',
+    cell: ({ row }) => (
+      <span className='whitespace-nowrap text-muted-foreground'>
+        {row.original.age ? `${row.original.age} años` : '—'}
+      </span>
+    ),
+    sortingFn: (a, b) =>
+      Number(a.original.age ?? 0) - Number(b.original.age ?? 0)
   },
   {
-    accessorKey: 'phone_number',
-    header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title='Teléfono' />
-    }
+    accessorKey: 'last_visit',
+    header: 'Última consulta',
+    cell: ({ row }) => (
+      <span className='whitespace-nowrap text-muted-foreground'>
+        {formatDate(row.original.last_visit) || '—'}
+      </span>
+    )
+  },
+  {
+    accessorKey: 'risk',
+    header: 'Riesgo',
+    cell: ({ row }) => {
+      const risk = row.original.risk ?? 'Bajo'
+      return (
+        <Badge
+          className={cn(
+            'rounded-full border-transparent px-2.5 py-0.5',
+            RISK_STYLES[risk] ?? 'bg-slate-100 text-slate-800 hover:bg-slate-100'
+          )}>
+          {risk}
+        </Badge>
+      )
+    },
+    filterFn: (row, columnId, value) =>
+      !value || (row.getValue<string | null>(columnId) ?? 'Bajo') === value
   },
   {
     id: 'actions',
-    header: 'Acciones',
+    header: () => <span className='block text-right'>Acciones</span>,
     cell: ({ row }) => {
-      const identication = row.getValue('identification') as string
-      const id = row.getValue('id') as string
-
+      const id = row.original.id
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild title='Abrir menú'>
-            <Button variant='ghost' className='h-8 w-full p-0 text-center'>
-              <span className='sr-only'>Abrir menú</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(identication)}>
-              Copiar identificación
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}`}>Ver paciente</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/edit`}>
-                Editar paciente
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/clinic-history`}>
-                Historia clínica
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/patients/${id}/clinic-evolution/new`}>
-                Crear evolución
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className='flex justify-end gap-1 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100'>
+          <ActionLink
+            href={`/dashboard/patients/${id}`}
+            title='Ver ficha del paciente'
+            className='text-primary'>
+            <Eye />
+          </ActionLink>
+          <ActionLink
+            href={`/dashboard/patients/${id}/edit`}
+            title='Editar paciente'
+            className='text-muted-foreground'>
+            <Pencil />
+          </ActionLink>
+          <ActionLink
+            href={`/dashboard/appointments?paciente=${id}`}
+            title='Nueva cita'
+            className='text-emerald-700'>
+            <CalendarPlus />
+          </ActionLink>
+        </div>
       )
     }
   }

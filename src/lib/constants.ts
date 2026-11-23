@@ -10,7 +10,6 @@ export const DB_TABLES = {
   MEDICATION_CATEGORIES: 'medication_categories',
   MEDICATIONS: 'medications',
   PRESCRIPTIONS: 'prescriptions',
-  CONSULTATION_MEDICATIONS: 'consultation_medications',
   NOTIFICATIONS_LOG: 'notifications_log',
   DOCTOR_PROFILE: 'doctor_profile'
 } as const

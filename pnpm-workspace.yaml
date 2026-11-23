@@ -1,5 +1,5 @@
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  '@tailwindcss/oxide': set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  sharp: true
+  unrs-resolver: true

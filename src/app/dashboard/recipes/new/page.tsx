@@ -1,40 +1,59 @@
-import { AppSection } from '@/components/app-section'
-import { RecipeForm } from '@/components/forms/recipe-form'
-import { Button } from '@/components/ui/button'
-import { getAllMedications } from '@/lib/services/medications-service'
-import { getAllPatients } from '@/lib/services/patients-service'
-import { ArrowLeft } from 'lucide-react'
-import { Heading } from '@/components/heading'
-import Link from 'next/link'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { NoticeCard } from '@/components/notice-card'
+import { RecipeEditor } from '@/components/recipe-editor'
+import { getPatientOptions } from '@/lib/services/appointments-service'
+import { getRecipeMedications } from '@/lib/services/catalog-service'
+import { getDoctorContext } from '@/lib/services/doctor-context'
+import { createClient } from '@/lib/supabase/server'
 
-export default async function Page() {
-  const patientsRaw = await getAllPatients()
-  const patients = patientsRaw.map((p) => ({
-    value: p.id,
-    label: `${p.names} ${p.lastnames}`,
-    ci: p.identification,
-  }))
-  const medications = await getAllMedications()
-  console.log('Medicaments:', medications)
-  console.log('Patients:', patientsRaw)
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export default async function NewRecipePage({
+  searchParams
+}: {
+  searchParams: Promise<{ paciente?: string }>
+}) {
+  const { paciente } = await searchParams
+
+  const supabase = createClient(await cookies())
+  // El layout y la página se renderizan en paralelo: sin sesión no se consulta nada
+  const { data: claims } = await supabase.auth.getClaims()
+  if (!claims) redirect('/login')
+
+  const [context, patients, medications] = await Promise.all([
+    getDoctorContext(supabase),
+    getPatientOptions(supabase),
+    getRecipeMedications(supabase)
+  ])
+
+  if (context?.role !== 'doctor') {
+    return (
+      <NoticeCard
+        title='Solo el médico puede emitir recetas'
+        href='/dashboard/recipes'
+        action='Volver a recetas'>
+        Las secretarias pueden consultar las recetas y descargar el PDF, pero no
+        emitirlas ni modificarlas.
+      </NoticeCard>
+    )
+  }
+
+  const presetPatient =
+    paciente && UUID.test(paciente) && patients.some((item) => item.id === paciente)
+      ? paciente
+      : ''
+
   return (
-    <AppSection>
-      <div className='space-y-6 w-full mx-auto'>
-        <Link href='/dashboard/recipes'>
-          <Button variant='ghost' className='hover:bg-neutral-100'>
-            <ArrowLeft className='mr-2 h-4 w-4' />
-            Volver
-          </Button>
-        </Link>
-        <div className='flex items-center justify-between'>
-          <div>
-            <Heading>Nueva Receta</Heading>
-          </div>
-        </div>
-        <div className='mt-6 max-w-6xl w-full mx-auto h-full'>
-          <RecipeForm patients={patients} medications={medications} />
-        </div>
-      </div>
-    </AppSection>
+    <RecipeEditor
+      patients={patients}
+      medications={medications}
+      defaultValues={{
+        patientId: presetPatient,
+        diagnosis: '',
+        diagnosisCode: '',
+        lines: []
+      }}
+    />
   )
 }

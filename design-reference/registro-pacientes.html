@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cardiolife - Registro de Nuevo Paciente</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dadc",
+                    "on-surface": "#191c1e",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-container-highest": "#e0e3e5",
+                    "tertiary-container": "#00b17b",
+                    "outline": "#6e7881",
+                    "on-primary-container": "#003751",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "primary-container": "#0ea5e9",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#006591",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "secondary": "#565e74",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-fixed-variant": "#004c6e",
+                    "surface-container-low": "#f2f4f6",
+                    "outline-variant": "#bec8d2",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#c9e6ff",
+                    "primary": "#006591",
+                    "surface": "#f7f9fb",
+                    "inverse-primary": "#89ceff",
+                    "background": "#f7f9fb",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-tertiary-fixed": "#002113",
+                    "secondary-container": "#dae2fd",
+                    "primary-fixed-dim": "#89ceff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#dae2fd",
+                    "on-secondary-container": "#5c647a",
+                    "on-primary-fixed": "#001e2f",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "tertiary": "#006c49",
+                    "surface-bright": "#f7f9fb",
+                    "surface-variant": "#e0e3e5",
+                    "on-tertiary-container": "#003b26",
+                    "on-background": "#191c1e",
+                    "on-surface-variant": "#3e4850",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#131b2e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "xl": "48px",
+                    "lg": "32px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "md": "24px",
+                    "margin-desktop": "40px",
+                    "xs": "8px",
+                    "sm": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "title-lg": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface bg-background flex">
+<aside class="h-screen w-64 fixed left-0 top-0 bg-on-secondary-fixed dark:bg-on-secondary-fixed shadow-md hidden md:flex flex-col py-lg px-sm z-20">
+<div class="flex items-center gap-4 mb-xl px-4">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="monitor_heart">monitor_heart</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary-fixed dark:text-primary-fixed">Cardiolife</h1>
+<p class="text-label-md font-label-md text-secondary-fixed-dim">Medical Management</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary-fixed-dim font-bold border-l-4 border-primary-fixed-dim bg-on-secondary-fixed-variant/20 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Appointments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="online_prediction">online_prediction</span>
+<span class="text-label-md font-label-md">AI Predictions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] h-16 bg-surface-container-lowest dark:bg-surface-container-low border-b border-outline-variant shadow-sm flex justify-between items-center px-gutter z-10 transition-colors duration-200">
+<div class="flex items-center md:hidden">
+<span class="material-symbols-outlined text-primary text-title-lg font-bold" data-icon="menu">menu</span>
+</div>
+<div class="flex-1 flex items-center justify-start md:justify-start px-4">
+<div class="relative w-full max-w-md hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 rounded-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary-container text-body-sm" placeholder="Buscar..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-full Active: opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3">
+<span class="hidden md:block text-label-md font-label-md text-on-surface">Dr. Julian Vance</span>
+<div class="w-8 h-8 rounded-full bg-primary-container overflow-hidden">
+<img alt="User profile picture" class="w-full h-full object-cover" data-alt="A professional headshot portrait of a doctor, clean and well-lit studio photography, modern high-key lighting, bright medical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsau3V2Rz6x06Z_Tqj2A9vQFLcyW9ufqVH8iIbd0RQ7Cw3DNdZQTYepOWNjogpWk0LyZCrj5eMACR9u-yfm2cALViOS_LH3OCARNPiC7S_C5KqaT9WhFu7LFB9Zb3pbfEH2rP5rzt9tMRAV19w1y1_--pA0kDYuvUbqIqNo-a7SXMoC1cMWKB9LSh83TCgKqKuV5lS5gV2riG60OTI5E9uxiNFB2lrhzsdMWdjk42M8mpqmBHc0w"/>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full min-h-screen pt-24 px-margin-mobile md:px-margin-desktop md:ml-64 flex justify-center pb-12">
+<div class="w-full max-w-3xl bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-lg md:p-xl h-fit">
+<div class="mb-lg border-b border-outline-variant/30 pb-4">
+<h2 class="text-headline-lg font-headline-lg text-primary mb-2">Registro de Nuevo Paciente</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Ingrese los datos correspondientes para registrar un nuevo perfil clínico en el sistema.</p>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="fullName">Nombre Completo</label>
+<input class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all" id="fullName" placeholder="Ej. Juan Pérez" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="idNumber">Cédula de Identidad</label>
+<input class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all" id="idNumber" placeholder="Ej. 12345678-9" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="birthDate">Fecha de Nacimiento</label>
+<div class="relative">
+<input class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all text-on-surface-variant" id="birthDate" type="date"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="phone">Teléfono</label>
+<input class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all" id="phone" placeholder="+56 9 1234 5678" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="email">Correo Electrónico</label>
+<input class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all" id="email" placeholder="juan.perez@ejemplo.com" type="email"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-md font-label-md text-on-surface" for="address">Dirección</label>
+<textarea class="w-full bg-[#F1F5F9] border-none rounded-lg px-4 py-3 text-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all resize-none" id="address" placeholder="Calle, Número, Comuna, Ciudad" rows="3"></textarea>
+</div>
+<div class="flex items-center justify-end gap-4 pt-6 border-t border-outline-variant/30">
+<button class="px-6 py-2.5 rounded-lg text-primary font-semibold hover:bg-surface-container-low transition-colors text-label-md font-label-md" type="button">
+                        Cancelar
+                    </button>
+<button class="px-6 py-2.5 rounded-lg bg-[#10B981] text-white font-semibold hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2 text-label-md font-label-md" type="submit">
+<span class="material-symbols-outlined text-sm" data-icon="save">save</span>
+                        Guardar
+                    </button>
+</div>
+</form>
+</div>
+</main>
+</body></html>

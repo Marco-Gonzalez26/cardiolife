@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cardiolife - Ficha del Paciente (Predicción de IA)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#89ceff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed": "#131b2e",
+                        "tertiary-container": "#00b17b",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-container": "#dae2fd",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-fixed": "#dae2fd",
+                        "secondary": "#565e74",
+                        "background": "#f7f9fb",
+                        "primary-fixed-dim": "#89ceff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#2d3133",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eceef0",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "outline-variant": "#bec8d2",
+                        "outline": "#6e7881",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "surface-dim": "#d8dadc",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary": "#006c49",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-secondary-container": "#5c647a",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#003751",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#3e4850",
+                        "surface-tint": "#006591",
+                        "on-surface": "#191c1e",
+                        "primary-fixed": "#c9e6ff",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-container-low": "#f2f4f6",
+                        "on-background": "#191c1e",
+                        "primary-container": "#0ea5e9",
+                        "on-primary-fixed": "#001e2f",
+                        "primary": "#006591",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#003b26"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "sm": "16px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "lg": "32px",
+                        "xs": "8px",
+                        "xl": "48px",
+                        "base": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Desktop Only) -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 bg-on-secondary-fixed dark:bg-on-secondary-fixed shadow-md flex-col py-lg px-sm z-50">
+<div class="mb-xl px-sm">
+<h1 class="text-headline-md font-headline-md font-bold text-primary-fixed dark:text-primary-fixed">Cardiolife</h1>
+<p class="text-label-md font-label-md text-primary-fixed-dim dark:text-primary-fixed-dim uppercase tracking-wider mt-1">Medical Management</p>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-3 px-sm py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-sm py-3 rounded-lg text-primary-fixed-dim font-bold border-l-4 border-primary-fixed-dim bg-on-secondary-fixed-variant/20 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="groups" data-weight="fill" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-sm py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Appointments</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-sm py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="online_prediction">online_prediction</span>
+<span class="text-label-md font-label-md">AI Predictions</span>
+</a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-3 px-sm py-3 rounded-lg text-secondary-fixed-dim font-medium hover:text-primary-fixed hover:bg-on-secondary-fixed-variant transition-colors duration-200 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] h-16 bg-surface-container-lowest dark:bg-surface-container-low border-b border-outline-variant shadow-sm flex justify-between items-center px-gutter z-40 transition-opacity">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Toggle (Visible only on mobile) -->
+<button class="md:hidden text-on-surface hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-title-lg font-title-lg font-bold text-on-surface dark:text-on-surface hidden md:block">Cardiolife</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<span class="text-label-md font-label-md text-on-surface hidden sm:block">Dr. Julian Vance</span>
+<img alt="User profile picture" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a male doctor in his 40s wearing a white lab coat over a light blue shirt. He has short dark hair, a reassuring smile, and a modern stethoscope around his neck. The lighting is soft and bright, typical of a high-end medical clinic, set against a blurred light gray background to convey a clean, clinical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXH9jVNKMGBMIx3t2Vgv_IF6Z9_wVYjAY_B8obl5uUQp5TkEIqTT6Hp2C8yf_CfSR3z5peyYBueT8CkUIITaIlJPO6wAgUQMq041wvZccNbxXoT_QVtZSmMiOYvRQDtSG3OnmhsrMi0ivy9LSq62hDXlhWeAnN1DS_WoZwxmEa9Z_3Pg7SJgox_V-QaXo-_A39rGnbLwVVX6JXvl0v4oQka6_R01AgpHAoHf52xlVYimv9uwo7fA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="w-full md:ml-64 pt-24 px-margin-mobile md:px-margin-desktop pb-xl min-h-screen">
+<!-- Breadcrumbs & Header -->
+<div class="mb-lg">
+<nav class="flex items-center text-body-sm font-body-sm text-secondary mb-2">
+<a class="hover:text-primary transition-colors" href="#">Patients</a>
+<span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+<span class="text-on-surface font-medium">Carlos Mendoza</span>
+</nav>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface">Ficha del Paciente</h1>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg text-primary font-label-md font-semibold hover:bg-surface-container-low transition-colors border border-primary">
+                        Historial Completo
+                    </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md font-semibold hover:bg-primary-container transition-colors shadow-sm">
+                        Agendar Consulta
+                    </button>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Patient Profile Card (Span 4) -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-variant p-lg flex flex-col items-center text-center">
+<div class="relative mb-4">
+<img alt="Carlos Mendoza" class="w-24 h-24 rounded-full object-cover border-4 border-surface-bright shadow-sm" data-alt="A high-quality portrait of a 55-year-old Hispanic male patient named Carlos Mendoza. He is wearing a comfortable, neutral-toned sweater and has a calm, attentive expression. The background is a soft, out-of-focus medical office setting with ample natural light, reinforcing a modern, clean, and trusting healthcare environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4n1e4MEVnYbC6mZbyoAxwLafTECB2K3YGompuXKGTZvgL0GarpG8VgXh5uVOtlfyR4RCt8XTZ72lOWEt9NW0_l1Y3gH87vZ2t5lLzHXnMsOTA47GpJdD3VJ5R9hXpaRfUu-aSJDm_GR6w2H-ljWJU3gN84R5VxPfPblUtoTDaCCwFq8Tz4wshK3qdjMHJJHvW773yb4BnFi3amHF9yyQdWkCXSVaERqVnfr8kHZGhcPbVePLmlA"/>
+<div class="absolute bottom-0 right-0 bg-tertiary-container text-on-tertiary-container w-6 h-6 rounded-full flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-sm">verified</span>
+</div>
+</div>
+<h2 class="text-title-lg font-title-lg text-on-surface mb-1">Carlos Mendoza</h2>
+<p class="text-body-sm font-body-sm text-secondary mb-4">ID: PAC-849201 • 58 años • Masculino</p>
+<div class="w-full grid grid-cols-2 gap-4 mt-4 text-left">
+<div class="bg-surface-bright p-3 rounded-lg border border-surface-variant">
+<p class="text-label-md font-label-md text-secondary uppercase mb-1">Sangre</p>
+<p class="text-body-md font-body-md text-on-surface font-medium">O Positivo</p>
+</div>
+<div class="bg-surface-bright p-3 rounded-lg border border-surface-variant">
+<p class="text-label-md font-label-md text-secondary uppercase mb-1">Peso/Altura</p>
+<p class="text-body-md font-body-md text-on-surface font-medium">82 kg / 1.75m</p>
+</div>
+<div class="col-span-2 bg-surface-bright p-3 rounded-lg border border-surface-variant">
+<p class="text-label-md font-label-md text-secondary uppercase mb-1">Condición Principal</p>
+<p class="text-body-md font-body-md text-on-surface font-medium">Hipertensión Arterial, Riesgo Coronario</p>
+</div>
+</div>
+</div>
+<!-- AI Risk Analysis Panel (Span 8) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-variant overflow-hidden flex flex-col">
+<div class="bg-primary/5 border-b border-primary/10 p-md flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary-container text-on-primary-container p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="online_prediction">online_prediction</span>
+</div>
+<div>
+<h3 class="text-title-lg font-title-lg text-on-surface">Análisis de Riesgo IA</h3>
+<p class="text-body-sm font-body-sm text-secondary">Actualizado hace 2 horas vía SmartWatch Health Data</p>
+</div>
+</div>
+<span class="bg-error-container/20 text-error px-3 py-1 rounded-full text-label-md font-label-md font-semibold border border-error/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">warning</span> Alerta Activa
+                    </span>
+</div>
+<div class="p-lg grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Probability Chart Area -->
+<div class="flex flex-col">
+<h4 class="text-label-md font-label-md text-on-surface-variant uppercase mb-4 tracking-wider">Probabilidad de Complicación (30 días)</h4>
+<!-- Minimalist Bar Chart Representation -->
+<div class="flex-grow flex flex-col justify-end space-y-4">
+<div class="flex items-center gap-3">
+<span class="w-16 text-body-sm font-body-sm text-secondary text-right">Cardíaco</span>
+<div class="flex-grow h-4 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full w-[78%] relative">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+<span class="w-12 text-label-md font-label-md text-error font-bold">78%</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-16 text-body-sm font-body-sm text-secondary text-right">Renal</span>
+<div class="flex-grow h-4 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[42%]"></div>
+</div>
+<span class="w-12 text-label-md font-label-md text-on-surface">42%</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-16 text-body-sm font-body-sm text-secondary text-right">Inasistencia</span>
+<div class="flex-grow h-4 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full w-[15%]"></div>
+</div>
+<span class="w-12 text-label-md font-label-md text-tertiary">15%</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mt-6 border-t border-surface-variant pt-4">
+                            Tendencia: <span class="text-error font-medium">↑ +12% respecto al mes anterior.</span>
+</p>
+</div>
+<!-- AI Recommendations Area -->
+<div class="bg-surface-bright rounded-xl p-md border border-surface-variant flex flex-col gap-4">
+<h4 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">psychiatry</span> Recomendaciones IA
+                        </h4>
+<div class="flex gap-3 items-start">
+<div class="w-2 h-2 rounded-full bg-error mt-2 flex-shrink-0"></div>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">Ajustar dosis de Losartán</p>
+<p class="text-body-sm font-body-sm text-secondary">Picos de presión arterial detectados en las mañanas (Promedio 145/92 mmHg).</p>
+</div>
+</div>
+<div class="flex gap-3 items-start">
+<div class="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+<div>
+<p class="text-body-md font-body-md text-on-surface font-medium">Adelantar cita de control</p>
+<p class="text-body-sm font-body-sm text-secondary">Sugerida para la próxima semana debido al aumento del riesgo cardiovascular.</p>
+</div>
+</div>
+<button class="mt-auto w-full py-2 bg-inverse-on-surface hover:bg-surface-variant text-on-surface font-label-md font-semibold rounded-lg transition-colors border border-outline-variant flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">edit_note</span> Aplicar Sugerencias
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
