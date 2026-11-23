@@ -1,17 +1,29 @@
 'use client'
 
 import { useState } from 'react'
+import { matchesSearch } from '@/lib/search'
 import {
   ColumnDef,
   ColumnFiltersState,
-  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable
 } from '@tanstack/react-table'
+import { ArrowUpDown, Filter, Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
   Table,
   TableBody,
@@ -20,20 +32,46 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Search, UserRoundPlus } from 'lucide-react'
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
-export function PatientsDataTable<TData, TValue>({
-  columns,
-  data
-}: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
+import type { PatientListItem } from '@/types/patient'
 
-  const [globalFilter, setGlobalFilter] = useState<string>('')
+const PAGE_SIZE = 10
+
+const SORT_OPTIONS: Record<string, { label: string; sorting: SortingState }> = {
+  recientes: {
+    label: 'Más recientes',
+    sorting: [{ id: 'created_at', desc: true }]
+  },
+  nombre: { label: 'Apellido (A-Z)', sorting: [{ id: 'lastnames', desc: false }] },
+  edad: { label: 'Edad (mayor a menor)', sorting: [{ id: 'age', desc: true }] },
+  consulta: {
+    label: 'Última consulta',
+    sorting: [{ id: 'last_visit', desc: true }]
+  }
+}
+
+const RISK_FILTERS = ['Todos', 'Alto', 'Medio', 'Bajo']
+
+interface DataTableProps {
+  columns: ColumnDef<PatientListItem>[]
+  data: PatientListItem[]
+  /** Texto de búsqueda inicial (viene del buscador de la barra superior: ?q=) */
+  initialFilter?: string
+}
+
+export function PatientsDataTable({
+  columns,
+  data,
+  initialFilter = ''
+}: DataTableProps) {
+  const [sortKey, setSortKey] = useState('recientes')
+  const [risk, setRisk] = useState('Todos')
+  const [globalFilter, setGlobalFilter] = useState(initialFilter)
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: PAGE_SIZE })
+
+  const sorting: SortingState = SORT_OPTIONS[sortKey].sorting
+  const columnFilters: ColumnFiltersState =
+    risk === 'Todos' ? [] : [{ id: 'risk', value: risk }]
+
   const table = useReactTable({
     data,
     columns,
@@ -41,90 +79,156 @@ export function PatientsDataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-
-    globalFilterFn: (row, columnId, filterValue) => {
-      const names = row.getValue('names')?.toString().toLowerCase() || ''
-      const lastnames =
-        row.getValue('lastnames')?.toString().toLowerCase() || ''
-      const identification =
-        row.getValue('identification')?.toString().toLowerCase() || ''
-      const search = filterValue.toLowerCase()
-
-      return (
-        names.includes(search) ||
-        lastnames.includes(search) ||
-        identification.includes(search)
+    onPaginationChange: setPagination,
+    onGlobalFilterChange: (value) => {
+      setGlobalFilter(value)
+      setPagination((current) => ({ ...current, pageIndex: 0 }))
+    },
+    globalFilterFn: (row, _columnId, filterValue: string) => {
+      const { names, lastnames, identification } = row.original
+      return matchesSearch(
+        `${names} ${lastnames} ${identification ?? ''}`,
+        filterValue
       )
     },
-
-    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
-      globalFilter
+      columnFilters,
+      globalFilter,
+      pagination,
+      columnVisibility: { created_at: false }
     }
   })
 
+  const total = table.getFilteredRowModel().rows.length
+  const from = total === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+  const to = Math.min(total, (pagination.pageIndex + 1) * pagination.pageSize)
+
+  const resetPage = () =>
+    setPagination((current) => ({ ...current, pageIndex: 0 }))
+
   return (
-    <div>
-      <div className=' relative'>
-        <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
-        <Input
-          placeholder='Buscar por nombre, apellido o identificación...'
-          value={globalFilter ?? ''}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className='pl-10 h-11 max-w-sm'
-        />
+    <div className='flex flex-col'>
+      <div className='flex flex-col items-center justify-between gap-4 border-b p-4 sm:flex-row'>
+        <div className='relative w-full sm:w-96'>
+          <Search className='absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground' />
+          <Input
+            placeholder='Buscar por nombre o cédula...'
+            value={globalFilter}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            aria-label='Buscar paciente'
+            className='h-10 bg-card pl-9'
+          />
+        </div>
+        <div className='flex w-full items-center gap-2 sm:w-auto'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline' className='gap-2'>
+                <Filter className='size-4' />
+                Filtros{risk !== 'Todos' && `: ${risk}`}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuLabel>Riesgo</DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={risk}
+                onValueChange={(value) => {
+                  setRisk(value)
+                  resetPage()
+                }}>
+                {RISK_FILTERS.map((option) => (
+                  <DropdownMenuRadioItem key={option} value={option}>
+                    {option}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline' className='gap-2'>
+                <ArrowUpDown className='size-4' />
+                Ordenar
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
+              <DropdownMenuRadioGroup value={sortKey} onValueChange={setSortKey}>
+                {Object.entries(SORT_OPTIONS).map(([key, option]) => (
+                  <DropdownMenuRadioItem key={key} value={key}>
+                    {option.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
-      <div className='overflow-hidden rounded-md border mt-4'>
-        <Table className='overflow-x-auto  w-full'>
-          <TableHeader className='text-center font-semibold'>
+      <div className='overflow-x-auto'>
+        <Table>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className='text-center font-semibold'>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+              <TableRow key={headerGroup.id} className='hover:bg-transparent'>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className='h-11 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}>
+                <TableRow key={row.id} className='group'>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <TableCell key={cell.id} className='px-4 py-3'>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className='hover:bg-transparent'>
                 <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'>
-                  No hay datos
+                  colSpan={table.getVisibleLeafColumns().length}
+                  className='h-24 text-center text-muted-foreground'>
+                  No se encontraron pacientes
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className='flex items-center justify-between border-t p-4'>
+        <p className='text-sm text-muted-foreground'>
+          Mostrando {from} a {to} de {total} pacientes
+        </p>
+        <div className='flex gap-2'>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            Anterior
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Siguiente
+          </Button>
+        </div>
       </div>
     </div>
   )

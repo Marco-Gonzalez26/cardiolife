@@ -1,23 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { AppSection } from '@/components/app-section'
 import { PatientForm } from '@/components/forms/patient-form'
-import { Heading } from '@/components/heading'
-import { toast } from 'sonner'
+import { Card, CardContent } from '@/components/ui/card'
+import { updatePatient } from '@/lib/services/patients-service'
 import type { PatientFormData } from '@/lib/validations/patient'
-import { createClient } from '@/lib/supabase/components-client'
-import { createPatient, updatePatient } from '@/lib/services/patients-service'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader
-} from '@/components/ui/card'
+import type { UpdatePatientData } from '@/types/patient'
 
 export const EditPatient = ({
   id,
@@ -29,56 +19,45 @@ export const EditPatient = ({
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: unknown) => {
     setIsLoading(true)
     try {
-      const patient = await updatePatient(id, data)
+      const result = await updatePatient(id, data as unknown as UpdatePatientData)
 
-      if (!patient) {
-        toast.error('Error al editar el paciente')
+      if (result.error || !result.patient) {
+        toast.error(result.error ?? 'Error al editar el paciente')
         return
       }
       toast.success('Paciente editado exitosamente')
-      router.push('/dashboard/patients')
-      router.refresh()
-    } catch (error) {
+      router.push(`/dashboard/patients/${id}`)
+    } catch {
       toast.error('Ocurrió un error inesperado')
     } finally {
       setIsLoading(false)
     }
   }
+
   return (
     <AppSection>
-      <div className='space-y-6  w-full mx-auto'>
-        <Link href='/dashboard/patients'>
-          <Button variant='ghost' className='hover:bg-neutral-100'>
-            <ArrowLeft className='mr-2 h-4 w-4' />
-            Volver
-          </Button>
-        </Link>
-        <div className='flex items-center justify-between'>
-          <div>
-            <Heading>Editar Paciente</Heading>
+      <Card className='mx-auto w-full max-w-3xl rounded-2xl shadow-sm'>
+        <CardContent className='space-y-6 p-2 md:p-6'>
+          <div className='border-b pb-4'>
+            <h1 className='text-3xl font-semibold tracking-tight text-primary'>
+              Editar Paciente
+            </h1>
+            <p className='mt-2 text-muted-foreground'>
+              Actualice los datos del perfil del paciente.
+            </p>
           </div>
-        </div>
-        <div className='mt-6'>
-          <Card className='border-neutral-200 shadow-sm'>
-            <CardHeader>
-              <CardDescription className='text-neutral-600'>
-                Información del paciente
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <PatientForm
-                formSubmit={handleSubmit}
-                loading={isLoading}
-                submitLabel='Editar Paciente'
-                defaultValues={patient}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+          <PatientForm
+            formSubmit={handleSubmit}
+            loading={isLoading}
+            submitLabel='Guardar cambios'
+            defaultValues={patient}
+            onCancel={() => router.push(`/dashboard/patients/${id}`)}
+          />
+        </CardContent>
+      </Card>
     </AppSection>
   )
 }

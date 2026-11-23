@@ -1,72 +1,123 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 'use client'
 import { AppSection } from '@/components/app-section'
 import { ClinicHistoryForm } from '@/components/forms/clinic-history-form'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import { createClinicHistory } from '@/lib/services/clinic-history-service'
-import { ClinicHistoryFormData } from '@/lib/validations/clinic-history'
+  PatientHeaderCard,
+  type PatientHeader
+} from '@/components/patient-header-card'
+import { saveClinicHistory } from '@/actions/save-clinic-history'
+import {
+  ClinicHistoryFormData,
+  ClinicHistoryStatus
+} from '@/lib/validations/clinic-history'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-export const NewClinicHistory = ({ patientId }: { patientId: string }) => {
+export type ClinicHistoryPatient = PatientHeader
+
+interface NewClinicHistoryProps {
+  patientId: string
+  patient: ClinicHistoryPatient
+  /** Fecha (ISO) de la última historia completada del paciente */
+  lastVisit: string | null
+  canComplete: boolean
+  /** Presente al abrir una historia existente (borrador o completada) */
+  clinicHistoryId?: number
+  historyStatus?: ClinicHistoryStatus
+  readOnly?: boolean
+  defaultValues?: Partial<ClinicHistoryFormData>
+}
+
+export const NewClinicHistory = ({
+  patientId,
+  patient,
+  lastVisit,
+  canComplete,
+  clinicHistoryId,
+  historyStatus,
+  readOnly = false,
+  defaultValues
+}: NewClinicHistoryProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const handleSubmit = async (values: ClinicHistoryFormData): Promise<void> => {
+
+  const save = async (
+    values: ClinicHistoryFormData,
+    status: ClinicHistoryStatus
+  ) => {
     setIsLoading(true)
     try {
-      const clinicHistory = await createClinicHistory({ ...values, patientId })
-      if (clinicHistory) {
-        toast.success('Historia clínica creada exitosamente')
-        router.push(`/dashboard/patients/${patientId}`)
-      } else {
-        toast.error('Error al crear la historia clínica')
+      const result = await saveClinicHistory({
+        patientId,
+        status,
+        clinicHistoryId,
+        data: values
+      })
+      if ('error' in result) {
+        toast.error(result.error)
+        return
       }
-    } catch (error) {
-      toast.error('Error al crear la historia clínica')
+      toast.success(
+        status === 'draft'
+          ? 'Borrador guardado'
+          : 'Historia clínica creada exitosamente'
+      )
+      router.push(`/dashboard/patients/${patientId}`)
+    } catch {
+      toast.error('Error al guardar la historia clínica')
     } finally {
       setIsLoading(false)
     }
   }
-  const handleCancel = async () => {}
+
+  const handleSubmit = (values: ClinicHistoryFormData) =>
+    save(values, 'completed')
+  const handleSaveDraft = (values: ClinicHistoryFormData) =>
+    save(values, 'draft')
+  const handleCancel = () => router.push(`/dashboard/patients/${patientId}`)
+
   return (
     <AppSection>
-      <div className='w-full mx-auto'>
-        <div className='mb-6 flex items-center justify-between'>
-          <Link href='/dashboard/patients'>
-            <Button variant='ghost' className='hover:bg-neutral-100'>
-              <ArrowLeft className='mr-2 h-4 w-4' />
-              Volver a Pacientes
-            </Button>
+      <div className='mx-auto w-full space-y-6'>
+        <Button asChild variant='ghost' className='-ml-3'>
+          <Link href={`/dashboard/patients/${patientId}`}>
+            <ArrowLeft />
+            Volver al paciente
           </Link>
-        </div>
-        <Card className='border-neutral-200 shadow-sm'>
-          <CardHeader>
-            <CardTitle className='text-2xl text-neutral-900'>
-              Nueva Historia Clínica
-            </CardTitle>
-            <CardDescription className='text-neutral-600'>
-              Completa todos los datos de la historia clínica del paciente
-            </CardDescription>
-          </CardHeader>
-        </Card>
-        <div className='mt-6'>
-          <ClinicHistoryForm
-            handleSubmit={handleSubmit}
-            handleCancel={handleCancel}
-            patientId={patientId}
-            isLoading={isLoading}
-          />
-        </div>
+        </Button>
+
+        <PatientHeaderCard
+          patient={patient}
+          lastVisit={lastVisit}
+          extraBadges={
+            <>
+              {historyStatus === 'draft' && (
+                <Badge variant='secondary'>Borrador</Badge>
+              )}
+              {historyStatus === 'completed' && (
+                <Badge variant='outline'>
+                  {readOnly ? 'Completada (solo lectura)' : 'Completada'}
+                </Badge>
+              )}
+            </>
+          }
+        />
+
+        <ClinicHistoryForm
+          handleSubmit={handleSubmit}
+          handleSaveDraft={handleSaveDraft}
+          handleCancel={handleCancel}
+          patientId={patientId}
+          isLoading={isLoading}
+          canComplete={canComplete}
+          readOnly={readOnly}
+          defaultValues={defaultValues}
+        />
       </div>
     </AppSection>
   )

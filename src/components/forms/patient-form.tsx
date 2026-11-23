@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarIcon, Loader2, Save } from 'lucide-react'
 import {
   Popover,
   PopoverContent,
@@ -17,16 +19,15 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Save, Loader2, CalendarIcon } from 'lucide-react'
 import {
   calculateAge,
   patientSchema,
   type PatientFormData
 } from '@/lib/validations/patient'
 import { Calendar } from '../ui/calendar'
-import { cn, getDate } from '@/lib/utils'
-import { useEffect } from 'react'
-import { CreatePatientData } from '@/lib/services/patients-service'
+import { cn } from '@/lib/utils'
+import type { CreatePatientData } from '@/types/patient'
+import { formatPickedDate } from '@/lib/format-date'
 
 interface PatientFormProps {
   formSubmit: (
@@ -35,13 +36,19 @@ interface PatientFormProps {
   loading?: boolean
   submitLabel?: string
   defaultValues?: PatientFormData
+  onCancel?: () => void
 }
+
+/** Campo relleno sin borde (estilo de Stitch): al enfocar se vuelve blanco con aro sky */
+const FIELD_CLASS =
+  'h-11 rounded-lg border-0 bg-muted px-4 shadow-none focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring dark:bg-muted'
 
 export function PatientForm({
   formSubmit,
   loading = false,
   submitLabel = 'Guardar',
-  defaultValues
+  defaultValues,
+  onCancel
 }: PatientFormProps) {
   const form = useForm<PatientFormData>({
     resolver: zodResolver(patientSchema),
@@ -63,37 +70,33 @@ export function PatientForm({
 
   useEffect(() => {
     if (birthdate) {
-      const age = calculateAge(birthdate)
-      form.setValue('age', String(age), {
+      form.setValue('age', String(calculateAge(birthdate)), {
         shouldValidate: false,
         shouldDirty: false
       })
     } else {
       form.setValue('age', '')
     }
-  }, [birthdate])
+  }, [birthdate, form])
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(formSubmit)} className='space-y-6'>
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 '>
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           <FormField
             control={form.control}
             name='names'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Nombres
-                </FormLabel>
+                <FormLabel className='font-semibold'>Nombres</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Ingresa los nombres'
-                    className='border-neutral-300 
-                   '
+                    placeholder='Ej. Juan Carlos'
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -102,17 +105,15 @@ export function PatientForm({
             name='lastnames'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Apellidos
-                </FormLabel>
+                <FormLabel className='font-semibold'>Apellidos</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Ingresa los apellidos'
-                    className='border-neutral-300 '
+                    placeholder='Ej. Pérez López'
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -122,17 +123,17 @@ export function PatientForm({
             name='identification'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Identificación
+                <FormLabel className='font-semibold'>
+                  Cédula de Identidad
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Cédula o identificación'
-                    className='border-neutral-300 '
+                    placeholder='Ej. 1712345678'
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -142,26 +143,28 @@ export function PatientForm({
             name='birthdate'
             render={({ field }) => (
               <FormItem className='flex flex-col'>
-                <FormLabel className='text-neutral-700 font-semibold'>
+                <FormLabel className='font-semibold'>
                   Fecha de Nacimiento
                 </FormLabel>
                 <Popover modal>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
-                        variant={'outline'}
+                        type='button'
+                        variant='ghost'
                         className={cn(
-                          'pl-3 text-left font-normal',
+                          FIELD_CLASS,
+                          'justify-start text-left font-normal hover:bg-muted',
                           !field.value && 'text-muted-foreground'
                         )}>
                         {field.value
-                          ? new Date(field.value).toLocaleDateString('es-ES')
+                          ? formatPickedDate(new Date(field.value))
                           : 'Selecciona una fecha'}
-                        <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                        <CalendarIcon className='ml-auto size-4 opacity-50' />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className='w-auto p-0' align='end'>
+                  <PopoverContent className='w-auto p-0' align='start'>
                     <Calendar
                       hideNavigation
                       mode='single'
@@ -186,17 +189,18 @@ export function PatientForm({
             name='age'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Edad
+                <FormLabel className='font-semibold'>
+                  Edad (se calcula sola)
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Edad del paciente'
-                    className='border-neutral-300 '
+                    readOnly
+                    placeholder='Según la fecha de nacimiento'
+                    className={cn(FIELD_CLASS, 'text-muted-foreground')}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -206,18 +210,16 @@ export function PatientForm({
             name='phone_number'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Teléfono
-                </FormLabel>
+                <FormLabel className='font-semibold'>Teléfono</FormLabel>
                 <FormControl>
                   <Input
                     type='tel'
-                    placeholder='Número de teléfono'
-                    className='border-neutral-300 '
+                    placeholder='Ej. 0991234567'
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -227,17 +229,15 @@ export function PatientForm({
             name='job'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Ocupación
-                </FormLabel>
+                <FormLabel className='font-semibold'>Ocupación</FormLabel>
                 <FormControl>
                   <Input
                     placeholder='Ocupación o profesión'
-                    className='border-neutral-300 '
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -247,34 +247,45 @@ export function PatientForm({
             name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className='text-neutral-700 font-semibold'>
-                  Email
+                <FormLabel className='font-semibold'>
+                  Correo Electrónico
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Email del paciente'
-                    className='border-neutral-300 '
+                    type='email'
+                    placeholder='juan.perez@ejemplo.com'
+                    className={FIELD_CLASS}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className='text-red-600' />
+                <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <div className='w-full flex md:justify-end mt-5'>
+
+        <div className='flex items-center justify-end gap-3 border-t pt-6'>
+          {onCancel && (
+            <Button
+              type='button'
+              variant='ghost'
+              onClick={onCancel}
+              className='font-semibold text-primary hover:text-primary'>
+              Cancelar
+            </Button>
+          )}
           <Button
             type='submit'
             disabled={loading}
-            className='w-full md:w-fit hover:cursor-pointer '>
+            className='bg-emerald-500 font-semibold text-white hover:bg-emerald-600'>
             {loading ? (
               <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader2 className='animate-spin' />
                 Guardando
               </>
             ) : (
               <>
-                <Save className='mr-2 h-4 w-4' />
+                <Save />
                 {submitLabel}
               </>
             )}
