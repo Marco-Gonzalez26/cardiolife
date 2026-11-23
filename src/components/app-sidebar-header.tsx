@@ -3,11 +3,16 @@ import { HeartPulse } from 'lucide-react'
 export const AppSidebarHeader = () => {
   return (
     <>
-      <div className='flex items-center gap-2'>
-        <HeartPulse className='h-6 w-6' />
+      <div className='flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10'>
+        <HeartPulse className='size-5 text-primary' />
       </div>
-      <div className=''>
-        <span className='mb-0.5 truncate font-bold text-xl'>Cardiolife</span>
+      <div className='grid leading-tight'>
+        <span className='truncate font-semibold tracking-tight text-foreground'>
+          Cardiolife
+        </span>
+        <span className='truncate text-xs text-muted-foreground'>
+          Gestión Médica
+        </span>
       </div>
     </>
   )

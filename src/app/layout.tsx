@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Inter } from 'next/font/google'
+import { Geist_Mono, Inter } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='es'>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
+    <html lang='es' className={inter.variable}>
+      <body className={`font-sans ${geistMono.variable} antialiased`}>
         {children}
         <Toaster />
       </body>
